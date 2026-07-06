@@ -5,11 +5,18 @@
     "kategori": "Kuliner",
     "deskripsi": "Keripik singkong renyah hasil olahan petani lokal Dusun Wonoyoso. Dibuat dari singkong pilihan yang diiris tipis dan digoreng hingga renyah sempurna. Tersedia dalam varian rasa gurih original dan pedas nikmat. Cocok sebagai camilan sehari-hari maupun oleh-oleh khas daerah. Dikemas higienis untuk menjaga kualitas dan kerenyahan.",
     "foto": "/images/keripik-singkong.png",
-    "galeri": ["/images/keripik-singkong.png", "/images/gula-kelapa.png", "/images/warung-kopi.png"],
+    "galeri": [
+      "/images/keripik-singkong.png",
+      "/images/gula-kelapa.png",
+      "/images/warung-kopi.png"
+    ],
     "jam_buka": "Senin - Sabtu (08.00 - 16.00 WIB)",
     "gmaps_embed": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3956.123456789!2d109.95!3d-7.35!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zN8KwMjEnMDAuMCJTIDEwOcKwNTcnMDAuMCJF!5e0!3m2!1sid!2sid!4v1234567890",
     "gmaps_link": "https://maps.app.goo.gl/example1",
-    "wa": "6281234567890"
+    "wa": "6281234567890",
+    "instagram": "@keripik_singkong_wonoyoso",
+    "tiktok": "@keripik_singkong_wonoyoso",
+    "facebook": "Keripik Singkong Wonoyoso"
   },
   {
     "id": "umkm-002",
@@ -17,11 +24,18 @@
     "kategori": "Kerajinan",
     "deskripsi": "Kerajinan anyaman bambu berkualitas tinggi buatan tangan Pak Slamet yang sudah berpengalaman lebih dari 20 tahun. Produk meliputi besek, tampah, keranjang, dan berbagai peralatan rumah tangga tradisional. Setiap produk dibuat dengan teknik anyaman warisan turun-temurun yang menghasilkan pola indah dan tahan lama. Menerima pesanan custom sesuai kebutuhan.",
     "foto": "/images/anyaman-bambu.png",
-    "galeri": ["/images/anyaman-bambu.png", "/images/jasa-jahit.png", "/images/anyaman-bambu.png"],
+    "galeri": [
+      "/images/anyaman-bambu.png",
+      "/images/jasa-jahit.png",
+      "/images/anyaman-bambu.png"
+    ],
     "jam_buka": "Senin - Minggu (07.00 - 17.00 WIB)",
     "gmaps_embed": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3956.123456789!2d109.95!3d-7.35!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zN8KwMjEnMDAuMCJTIDEwOcKwNTcnMDAuMCJF!5e0!3m2!1sid!2sid!4v1234567891",
     "gmaps_link": "https://maps.app.goo.gl/example2",
-    "wa": "6281234567891"
+    "wa": "6281234567891",
+    "instagram": "@anyaman_bambu_pak_slamet",
+    "tiktok": "@anyaman_bambu_pak_slamet",
+    "facebook": "Anyaman Bambu Pak Slamet"
   },
   {
     "id": "umkm-003",
@@ -29,11 +43,18 @@
     "kategori": "Kuliner",
     "deskripsi": "Warung kopi tradisional yang menyajikan kopi tubruk khas Wonosobo dari biji kopi pilihan yang disangrai manual. Nikmati kehangatan kopi di tengah suasana pedesaan yang asri. Selain kopi, tersedia juga aneka gorengan dan jajanan pasar sebagai teman ngopi. Tempat yang pas untuk bersantai dan ngobrol bersama warga sekitar.",
     "foto": "/images/warung-kopi.png",
-    "galeri": ["/images/warung-kopi.png", "/images/keripik-singkong.png", "/images/gula-kelapa.png"],
+    "galeri": [
+      "/images/warung-kopi.png",
+      "/images/keripik-singkong.png",
+      "/images/gula-kelapa.png"
+    ],
     "jam_buka": "Setiap Hari (06.00 - 21.00 WIB)",
     "gmaps_embed": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3956.123456789!2d109.95!3d-7.35!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zN8KwMjEnMDAuMCJTIDEwOcKwNTcnMDAuMCJF!5e0!3m2!1sid!2sid!4v1234567892",
     "gmaps_link": "https://maps.app.goo.gl/example3",
-    "wa": "6281234567892"
+    "wa": "6281234567892",
+    "instagram": "@warung_kopi_mbah_darmo",
+    "tiktok": "@warung_kopi_mbah_darmo",
+    "facebook": "Warung Kopi Mbah Darmo"
   },
   {
     "id": "umkm-004",
@@ -41,11 +62,18 @@
     "kategori": "Pertanian",
     "deskripsi": "Sayur-mayur organik segar langsung dari kebun Bu Tini di Dusun Wonoyoso. Ditanam tanpa pestisida kimia, menggunakan pupuk alami dari kompos dan pupuk kandang. Tersedia berbagai jenis sayuran seperti bayam, kangkung, sawi, terong, cabai, dan tomat. Bisa pesan langsung untuk diantar ke rumah di area Kecamatan Mojotengah.",
     "foto": "/images/sayur-organik.png",
-    "galeri": ["/images/sayur-organik.png", "/images/gula-kelapa.png", "/images/sayur-organik.png"],
+    "galeri": [
+      "/images/sayur-organik.png",
+      "/images/gula-kelapa.png",
+      "/images/sayur-organik.png"
+    ],
     "jam_buka": "Senin - Sabtu (05.00 - 12.00 WIB)",
     "gmaps_embed": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3956.123456789!2d109.95!3d-7.35!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zN8KwMjEnMDAuMCJTIDEwOcKwNTcnMDAuMCJF!5e0!3m2!1sid!2sid!4v1234567893",
     "gmaps_link": "https://maps.app.goo.gl/example4",
-    "wa": "6281234567893"
+    "wa": "6281234567893",
+    "instagram": "@sayur_organik_bu_tini",
+    "tiktok": "@sayur_organik_bu_tini",
+    "facebook": "Sayur Organik Bu Tini"
   },
   {
     "id": "umkm-005",
@@ -53,11 +81,18 @@
     "kategori": "Jasa",
     "deskripsi": "Jasa menjahit dan permak pakaian profesional oleh Bu Ningsih yang telah melayani warga Wonoyoso selama lebih dari 15 tahun. Menerima jahitan baju seragam sekolah, kebaya, kemeja, celana, dan berbagai jenis pakaian lainnya. Juga melayani permak (perbaikan) pakaian seperti mengganti resleting, memperkecil atau memperbesar ukuran, dan obras. Hasil rapi dan harga terjangkau.",
     "foto": "/images/jasa-jahit.png",
-    "galeri": ["/images/jasa-jahit.png", "/images/anyaman-bambu.png", "/images/jasa-jahit.png"],
+    "galeri": [
+      "/images/jasa-jahit.png",
+      "/images/anyaman-bambu.png",
+      "/images/jasa-jahit.png"
+    ],
     "jam_buka": "Senin - Sabtu (08.00 - 17.00 WIB)",
     "gmaps_embed": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3956.123456789!2d109.95!3d-7.35!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zN8KwMjEnMDAuMCJTIDEwOcKwNTcnMDAuMCJF!5e0!3m2!1sid!2sid!4v1234567894",
     "gmaps_link": "https://maps.app.goo.gl/example5",
-    "wa": "6281234567894"
+    "wa": "6281234567894",
+    "instagram": "@jahit___permak_bu_ningsih",
+    "tiktok": "@jahit___permak_bu_ningsih",
+    "facebook": "Jahit & Permak Bu Ningsih"
   },
   {
     "id": "umkm-006",
@@ -65,10 +100,17 @@
     "kategori": "Kuliner",
     "deskripsi": "Gula kelapa (gula jawa) asli buatan Pak Joko, diproduksi secara tradisional dari nira kelapa segar yang dimasak hingga mengental dan dicetak dalam bentuk bulat. Gula kelapa ini memiliki aroma khas dan rasa manis alami yang sempurna untuk memasak, membuat jamu, atau sebagai pemanis alami pengganti gula pasir. Tanpa bahan pengawet dan pewarna.",
     "foto": "/images/gula-kelapa.png",
-    "galeri": ["/images/gula-kelapa.png", "/images/keripik-singkong.png", "/images/warung-kopi.png"],
+    "galeri": [
+      "/images/gula-kelapa.png",
+      "/images/keripik-singkong.png",
+      "/images/warung-kopi.png"
+    ],
     "jam_buka": "Senin - Jumat (07.00 - 15.00 WIB)",
     "gmaps_embed": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3956.123456789!2d109.95!3d-7.35!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zN8KwMjEnMDAuMCJTIDEwOcKwNTcnMDAuMCJF!5e0!3m2!1sid!2sid!4v1234567895",
     "gmaps_link": "https://maps.app.goo.gl/example6",
-    "wa": "6281234567895"
+    "wa": "6281234567895",
+    "instagram": "@gula_kelapa_pak_joko",
+    "tiktok": "@gula_kelapa_pak_joko",
+    "facebook": "Gula Kelapa Pak Joko"
   }
 ]
