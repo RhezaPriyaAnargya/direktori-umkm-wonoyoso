@@ -49,12 +49,9 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="mt-10 pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <p className="text-xs text-white/40 text-center sm:text-left">
-            © {new Date().getFullYear()} Direktori UMKM Wonoyoso. Program KKN Universitas.
-          </p>
-          <p className="text-xs text-white/40">
-            Dibuat oleh <span className="text-primary font-medium">Rheza Priya Anargya</span> — 123230032
+        <div className="mt-10 pt-6 border-t border-white/10 flex flex-col items-center justify-center gap-3">
+          <p className="text-xs text-white/40 text-center">
+            © {new Date().getFullYear()} Direktori UMKM Wonoyoso. Sobowomo 2026
           </p>
         </div>
       </div>
