@@ -4,6 +4,8 @@ import { notFound } from "next/navigation";
 import umkmData from "@/data/umkm.json";
 import ButtonWA from "@/components/ButtonWA";
 import MapEmbed from "@/components/MapEmbed";
+import ImageCarousel from "@/components/ImageCarousel";
+import RelatedUmkm from "@/components/RelatedUmkm";
 
 // Generate static params for SSG
 export async function generateStaticParams() {
@@ -110,6 +112,11 @@ export default async function UmkmDetailPage({ params }) {
               </p>
             </div>
 
+            {/* Image Carousel / Gallery */}
+            {umkm.galeri && umkm.galeri.length > 0 && (
+              <ImageCarousel images={umkm.galeri} altText={umkm.nama} />
+            )}
+
             {/* Operating Hours */}
             <div className="bg-white rounded-2xl shadow-sm border border-border p-5 sm:p-7 animate-fade-in-up opacity-0 animation-delay-100">
               <h2 className="text-lg font-bold text-text-primary mb-3 flex items-center gap-2">
@@ -207,6 +214,13 @@ export default async function UmkmDetailPage({ params }) {
           </div>
         </div>
       </div>
+
+      {/* Related UMKM Section */}
+      <RelatedUmkm
+        currentId={umkm.id}
+        kategori={umkm.kategori}
+        allData={umkmData}
+      />
     </div>
   );
 }
