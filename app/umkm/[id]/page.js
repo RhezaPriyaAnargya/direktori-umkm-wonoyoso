@@ -228,7 +228,7 @@ export default async function UmkmDetailPage({ params }) {
                   </div>
                   <div>
                     <p className="text-xs text-text-muted">Lokasi</p>
-                    <p className="text-sm font-semibold text-text-primary">Dsn. Wonoyoso, Wonosobo</p>
+                    <p className="text-sm font-semibold text-text-primary">{umkm.lokasi || "Dsn. Wonoyoso, Wonosobo"}</p>
                   </div>
                 </div>
               </div>

@@ -67,7 +67,7 @@ export default function ImageCarousel({ images, altText }) {
 
       {/* Thumbnail Strip */}
       {images.length > 1 && (
-        <div className="flex gap-2 mt-3 overflow-x-auto pb-1 scrollbar-hide">
+        <div className="flex gap-2 mt-3 overflow-x-auto pb-1 scrollbar-thin">
           {images.map((img, index) => (
             <button
               key={index}

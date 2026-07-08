@@ -34,17 +34,37 @@ body {
 
 /* Custom scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 6px;
+  height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: var(--color-surface);
+  background: transparent;
 }
 ::-webkit-scrollbar-thumb {
   background: var(--color-text-muted);
-  border-radius: 4px;
+  border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
   background: var(--color-text-secondary);
+}
+
+/* Thin scrollbar for thumbnail strips / horizontal scroll areas */
+.scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(156, 163, 175, 0.4) transparent;
+}
+.scrollbar-thin::-webkit-scrollbar {
+  height: 4px;
+}
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: rgba(156, 163, 175, 0.4);
+  border-radius: 2px;
+}
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background: rgba(156, 163, 175, 0.7);
 }
 
 /* Animations */
@@ -131,4 +151,30 @@ body {
   border-color: var(--color-primary);
   color: var(--color-primary);
   background-color: #f0fdf4;
+}
+
+/* Bottom Nav */
+.bottom-nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 56px;
+  padding: 6px 4px;
+  color: var(--color-text-muted);
+  transition: color 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+.bottom-nav-item:active,
+.bottom-nav-item:hover {
+  color: var(--color-primary);
+}
+.bottom-nav-fab {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  min-width: 64px;
+  padding: 0 4px 6px;
+  -webkit-tap-highlight-color: transparent;
 }

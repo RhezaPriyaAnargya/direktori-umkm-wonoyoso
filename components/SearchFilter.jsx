@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import UmkmCard from "./UmkmCard";
 
 const CATEGORIES = ["Semua", "Kuliner", "Kerajinan", "Jasa", "Pertanian"];
@@ -8,6 +8,17 @@ const CATEGORIES = ["Semua", "Kuliner", "Kerajinan", "Jasa", "Pertanian"];
 export default function SearchFilter({ data }) {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState("Semua");
+
+  // Listen for search events from BottomNav and KategoriUmkm
+  useEffect(() => {
+    const handler = (e) => {
+      const { query, category } = e.detail;
+      if (query !== undefined) setSearchQuery(query);
+      if (category) setActiveCategory(category);
+    };
+    window.addEventListener("bottomNavSearch", handler);
+    return () => window.removeEventListener("bottomNavSearch", handler);
+  }, []);
 
   const filteredData = useMemo(() => {
     return data.filter((umkm) => {
