@@ -35,6 +35,7 @@ export default function ImageCarousel({ images, altText }) {
             src={images[currentIndex]}
             alt={`${altText} - Foto ${currentIndex + 1}`}
             fill
+            priority={currentIndex === 0}
             sizes="(max-width: 768px) 100vw, 60vw"
             className="object-cover transition-opacity duration-300"
           />
