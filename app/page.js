@@ -3,7 +3,15 @@ import HeroCarousel from "@/components/HeroCarousel";
 import KategoriUmkm from "@/components/KategoriUmkm";
 import umkmData from "@/data/umkm.json";
 
-const categories = [...new Set(umkmData.map((u) => u.kategori))];
+const uniqueCategories = new Set();
+umkmData.forEach(u => {
+  if (u.kategori.includes('&')) {
+    u.kategori.split('&').forEach(k => uniqueCategories.add(k.trim()));
+  } else {
+    uniqueCategories.add(u.kategori);
+  }
+});
+const categories = [...uniqueCategories];
 
 export default function HomePage() {
   return (

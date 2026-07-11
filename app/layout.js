@@ -4,6 +4,7 @@ import Footer from "@/components/Footer";
 import BottomNav from "@/components/BottomNav";
 
 export const metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"),
   title: "Direktori UMKM Dusun Wonoyoso | Kec. Mojotengah, Wonosobo",
   description:
     "Temukan dan dukung UMKM lokal di Dusun Wonoyoso, Desa Mojosari, Kecamatan Mojotengah, Kabupaten Wonosobo. Direktori lengkap usaha mikro kecil menengah meliputi kuliner, kerajinan, jasa, dan pertanian.",

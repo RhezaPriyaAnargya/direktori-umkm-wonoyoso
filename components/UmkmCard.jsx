@@ -2,13 +2,12 @@ import Image from "next/image";
 import Link from "next/link";
 
 function getCategoryBadgeClass(kategori) {
-  switch (kategori.toLowerCase()) {
-    case "kuliner": return "badge-kuliner";
-    case "kerajinan": return "badge-kerajinan";
-    case "jasa": return "badge-jasa";
-    case "pertanian": return "badge-pertanian";
-    default: return "badge-kuliner";
-  }
+  const cat = kategori.toLowerCase();
+  if (cat.includes("kuliner")) return "badge-kuliner";
+  if (cat.includes("kerajinan")) return "badge-kerajinan";
+  if (cat.includes("jasa")) return "badge-jasa";
+  if (cat.includes("pertanian")) return "badge-pertanian";
+  return "badge-kuliner";
 }
 
 export default function UmkmCard({ umkm }) {

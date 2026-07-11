@@ -57,9 +57,87 @@
     ],
     "jam_buka": "Senin - Minggu (08.00 - 17.00 WIB)",
     "lokasi": "Dsn. Wonoyoso, Wonosobo",
-    "gmaps_embed": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3956.123456789!2d109.95!3d-7.35!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zN8KwMjEnMDAuMCJTIDEwOcKwNTcnMDAuMCJF!5e0!3m2!1sid!2sid!4v1234567892",
-    "gmaps_link": "https://maps.app.goo.gl/example3",
+    "gmaps_embed": "https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d192.9048324421619!2d109.88590275381047!3d-7.321686841625037!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e7aa114192124b5%3A0xc53f79e3c4fe714c!2sGhanim%20Snack!5e1!3m2!1sid!2sid!4v1783686532075!5m2!1sid!2sid",
+    "gmaps_link": "https://maps.app.goo.gl/DmYhp9A1hZUmp3vR8",
     "wa": "6285713472585",
     "instagram": "@ghanimsnack_"
+  },
+  {
+    "id": "umkm-004",
+    "nama": "Mug Custom Wonosobo",
+    "kategori": "Kerajinan & Jasa",
+    "deskripsi": "Berdiri sejak tahun 2020 dengan mengusung slogan 'Produk Lokal, Kualitas Import', Mug Custom Wonosobo adalah solusi tepat untuk kebutuhan suvenir dan merchandise Anda. Kami menyediakan berbagai pilihan media cetak berkualitas, mulai dari Mug Import Premium, Tumbler, Cangkir, Mug Enamel, hingga Mug Bunglon unik yang dapat berubah warna saat dituang air panas. Kami memberikan layanan terbaik dengan harga bersaing. Keunggulan kami meliputi proses pengerjaan yang sangat cepat (bisa ditunggu), fleksibilitas pesanan tanpa minimal order (bisa satuan) hingga kesiapan menangani pesanan partai besar. Setiap pemesanan juga sudah termasuk fasilitas gratis dus kemasan.",
+    "foto": "/images/mug_custom_wonosobo/mug_custom_wonosobo_1.png",
+    "galeri": [
+      "/images/mug_custom_wonosobo/mug_custom_wonosobo_1.png",
+      "/images/mug_custom_wonosobo/mug_custom_wonosobo_2.png",
+      "/images/mug_custom_wonosobo/mug_custom_wonosobo_3.png",
+      "/images/mug_custom_wonosobo/mug_custom_wonosobo_4.png",
+      "/images/mug_custom_wonosobo/mug_custom_wonosobo_5.png"
+    ],
+    "jam_buka": "Senin - Minggu (09.00 - 22.00 WIB)",
+    "lokasi": "Dsn. Wonoyoso, Wonosobo",
+    "gmaps_embed": "https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d1929.692336731996!2d109.8841806!3d-7.3217047!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e700bf2fa9ee231%3A0x5ffcbe231bd1925e!2sMUG%20CUSTOM%20WONOSOBO!5e1!3m2!1sid!2sid!4v1783670181788!5m2!1sid!2sid",
+    "gmaps_link": "https://maps.app.goo.gl/3FsNPvGfwqAckhMV8",
+    "wa": "6281314273648",
+    "instagram": "@mugcustom_wonosobo"
+  },
+  {
+    "id": "umkm-005",
+    "nama": "Warung Teras Lia",
+    "kategori": "Kuliner",
+    "deskripsi": "Warung Teras Lia hadir menawarkan perpaduan menu camilan ringan hingga makanan berat yang siap menggugah selera Anda. Bagi pencinta camilan dengan cita rasa pedas dan gurih, kami menyediakan menu populer seperti pangsit chili oil, makaroni chili oil, serta opak renyah. Selain camilan, kami juga menyajikan hidangan berat seperti bakso hangat yang lezat dan mengenyangkan. Warung Teras Lia adalah pilihan tepat untuk bersantai maupun bersantap ria.",
+    "foto": "/images/warung_teras_lia/warung_teras_lia_1.jpeg",
+    "galeri": [
+      "/images/warung_teras_lia/warung_teras_lia_1.jpeg",
+      "/images/warung_teras_lia/warung_teras_lia_2.jpeg",
+      "/images/warung_teras_lia/warung_teras_lia_3.jpeg",
+      "/images/warung_teras_lia/warung_teras_lia_4.jpeg",
+      "/images/warung_teras_lia/warung_teras_lia_5.jpg",
+      "/images/warung_teras_lia/warung_teras_lia_6.jpg"
+    ],
+    "jam_buka": "Senin - Minggu (10.00 - 18.00 WIB)",
+    "lokasi": "Dsn. Wonoyoso, Wonosobo",
+    "gmaps_embed": "https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d1929.692336731996!2d109.8841806!3d-7.3217047!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e700bf2fa9ee231%3A0x5ffcbe231bd1925e!2sMUG%20CUSTOM%20WONOSOBO!5e1!3m2!1sid!2sid!4v1783670181788!5m2!1sid!2sid",
+    "gmaps_link": "https://maps.app.goo.gl/3FsNPvGfwqAckhMV8",
+    "wa": "6282241162260"
+  },
+  {
+    "id": "umkm-006",
+    "nama": "Ping jet Wonoyoso",
+    "kategori": "Kuliner",
+    "deskripsi": "Ping Jet, singkatan dari Emping Dipejet, merupakan produk camilan kebanggaan lokal yang diolah dari singkong berkualitas. Melalui proses pengolahan yang tepat, Ping Jet menghasilkan tekstur emping yang sangat renyah. Tersedia dalam dua varian rasa utama, yaitu original yang gurih dan pedas, camilan ini cocok untuk dinikmati dalam berbagai kesempatan. Berkat konsistensi dalam menjaga kualitas rasa dan pengemasan, Ping Jet tidak hanya diminati oleh pasar lokal, tetapi juga telah sukses memperluas jangkauan penjualannya hingga menembus pasar internasional.",
+    "foto": "/images/pingjet_wonoyoso/pingjet_wonoyoso_1.jpg",
+    "galeri": [
+      "/images/pingjet_wonoyoso/pingjet_wonoyoso_1.jpg",
+      "/images/pingjet_wonoyoso/pingjet_wonoyoso_2.jpg",
+      "/images/pingjet_wonoyoso/pingjet_wonoyoso_3.jpg"
+    ],
+    "jam_buka": "Senin - Minggu (10.00 - 16.00 WIB)",
+    "lokasi": "Dsn. Wonoyoso, Wonosobo",
+    "gmaps_embed": "https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d1929.692336731996!2d109.8841806!3d-7.3217047!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e700bf2fa9ee231%3A0x5ffcbe231bd1925e!2sMUG%20CUSTOM%20WONOSOBO!5e1!3m2!1sid!2sid!4v1783670181788!5m2!1sid!2sid",
+    "gmaps_link": "https://maps.app.goo.gl/3FsNPvGfwqAckhMV8",
+    "wa": "6289603812157",
+    "instagram": "@pingjet_wonoyoso"
+  },
+  {
+    "id": "umkm-007",
+    "nama": "Megana_sore",
+    "kategori": "Kuliner",
+    "deskripsi": "Megana Sore menyajikan kuliner tradisional autentik khas Wonosobo, yakni Nasi Megana. Hidangan gurih bernuansa lokal ini sangat direkomendasikan untuk dinikmati bersama pasangan klasiknya, yaitu tempe kemul renyah yang disajikan hangat.",
+    "foto": "/images/megana_sore/megana_sore_1.jpg",
+    "galeri": [
+      "/images/megana_sore/megana_sore_1.jpg",
+      "/images/megana_sore/megana_sore_2.jpg",
+      "/images/megana_sore/megana_sore_3.jpg",
+      "/images/megana_sore/megana_sore_4.jpg"
+
+    ],
+    "jam_buka": "Senin - Minggu (16.00 - 19.00 WIB)",
+    "lokasi": "Dsn. Wonoyoso, Wonosobo",
+    "gmaps_embed": "https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d1929.692336731996!2d109.8841806!3d-7.3217047!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e700bf2fa9ee231%3A0x5ffcbe231bd1925e!2sMUG%20CUSTOM%20WONOSOBO!5e1!3m2!1sid!2sid!4v1783670181788!5m2!1sid!2sid",
+    "gmaps_link": "https://maps.app.goo.gl/3FsNPvGfwqAckhMV8",
+    "wa": "62895402519493"
   }
 ]
+

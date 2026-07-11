@@ -49,7 +49,7 @@ export default function HeroCarousel() {
     <section className="relative min-h-[85vh] sm:min-h-[90vh] flex items-center justify-center overflow-hidden" onTouchStart={onTS} onTouchMove={onTM} onTouchEnd={onTE}>
       {slides.map((s, i) => (
         <div key={`${s.id}-${i}`} className={`absolute inset-0 transition-opacity duration-700 ease-in-out ${i === cur ? "opacity-100 z-[1]" : "opacity-0 z-0"}`}>
-          <Image src={s.image} alt={s.title} fill priority={i === 0} sizes="100vw" className="object-cover" />
+          <Image src={s.image} alt={s.title} fill priority={true} sizes="100vw" className="object-cover" />
           <div className="absolute inset-0 hero-overlay" />
         </div>
       ))}

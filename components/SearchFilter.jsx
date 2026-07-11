@@ -29,7 +29,7 @@ export default function SearchFilter({ data }) {
         umkm.deskripsi.toLowerCase().includes(searchQuery.toLowerCase());
 
       const matchesCategory =
-        activeCategory === "Semua" || umkm.kategori === activeCategory;
+        activeCategory === "Semua" || umkm.kategori.toLowerCase().includes(activeCategory.toLowerCase());
 
       return matchesSearch && matchesCategory;
     });

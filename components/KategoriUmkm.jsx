@@ -12,7 +12,7 @@ const CATEGORY_CONFIG = [
 export default function KategoriUmkm() {
   const categoryCounts = CATEGORY_CONFIG.map((cat) => ({
     ...cat,
-    count: umkmData.filter((u) => u.kategori === cat.name).length,
+    count: umkmData.filter((u) => u.kategori.toLowerCase().includes(cat.name.toLowerCase())).length,
   }));
 
   const handleCategoryClick = (categoryName) => {
