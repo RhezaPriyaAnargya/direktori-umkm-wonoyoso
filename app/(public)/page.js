@@ -1,23 +1,27 @@
 import SearchFilter from "@/components/SearchFilter";
 import HeroCarousel from "@/components/HeroCarousel";
 import KategoriUmkm from "@/components/KategoriUmkm";
-import umkmData from "@/data/umkm.json";
+import { getAllUmkm } from "@/lib/umkm";
 
-const uniqueCategories = new Set();
-umkmData.forEach(u => {
-  if (u.kategori.includes('&')) {
-    u.kategori.split('&').forEach(k => uniqueCategories.add(k.trim()));
-  } else {
-    uniqueCategories.add(u.kategori);
-  }
-});
-const categories = [...uniqueCategories];
+export const revalidate = 60; // Revalidate data setiap 60 detik
 
-export default function HomePage() {
+export default async function HomePage() {
+  const umkmData = await getAllUmkm();
+
+  const uniqueCategories = new Set();
+  umkmData.forEach((u) => {
+    if (u.kategori.includes("&")) {
+      u.kategori.split("&").forEach((k) => uniqueCategories.add(k.trim()));
+    } else {
+      uniqueCategories.add(u.kategori);
+    }
+  });
+  const categories = [...uniqueCategories];
+
   return (
     <>
       {/* ============ HERO CAROUSEL ============ */}
-      <HeroCarousel />
+      <HeroCarousel umkmData={umkmData} />
 
       {/* ============ STATS SECTION ============ */}
       <section className="relative z-20 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto py-8 sm:py-10">
@@ -34,7 +38,7 @@ export default function HomePage() {
       </section>
 
       {/* ============ KATEGORI UMKM ============ */}
-      <KategoriUmkm />
+      <KategoriUmkm umkmData={umkmData} />
 
       {/* ============ KATALOG SECTION ============ */}
       <SearchFilter data={umkmData} />

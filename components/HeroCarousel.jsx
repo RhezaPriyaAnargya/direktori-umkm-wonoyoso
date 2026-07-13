@@ -3,18 +3,16 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import umkmData from "@/data/umkm.json";
 
-// Default slides for SSR (Server Side Rendering)
-const defaultSlides = umkmData.slice(0, 5).map(u => ({
-  image: u.foto,
-  title: u.nama,
-  highlight: u.kategori,
-  subtitle: u.deskripsi,
-  id: u.id
-}));
+export default function HeroCarousel({ umkmData = [] }) {
+  const defaultSlides = umkmData.slice(0, 5).map(u => ({
+    image: u.foto,
+    title: u.nama,
+    highlight: u.kategori,
+    subtitle: u.deskripsi,
+    id: u.id
+  }));
 
-export default function HeroCarousel() {
   const [slides, setSlides] = useState(defaultSlides);
   const [cur, setCur] = useState(0);
   const [busy, setBusy] = useState(false);
@@ -24,6 +22,7 @@ export default function HeroCarousel() {
 
   useEffect(() => {
     // Randomize slides on the client side after hydration
+    if (umkmData.length === 0) return;
     const shuffled = [...umkmData].sort(() => Math.random() - 0.5);
     setSlides(shuffled.slice(0, 5).map(u => ({
       image: u.foto,
@@ -32,7 +31,7 @@ export default function HeroCarousel() {
       subtitle: u.deskripsi,
       id: u.id
     })));
-  }, []);
+  }, [umkmData]);
 
   const go = useCallback((i) => { if (busy || slides.length === 0) return; setBusy(true); setCur(i); setTimeout(() => setBusy(false), 600); }, [busy, slides.length]);
   const next = useCallback(() => { if (slides.length > 0) go((cur + 1) % slides.length); }, [cur, go, slides.length]);
@@ -44,6 +43,8 @@ export default function HeroCarousel() {
   const onTS = (e) => { startX.current = e.touches[0].clientX; };
   const onTM = (e) => { endX.current = e.touches[0].clientX; };
   const onTE = () => { const d = startX.current - endX.current; if (Math.abs(d) > 50) { d > 0 ? next() : prev(); reset(); } };
+
+  if (slides.length === 0) return null;
 
   return (
     <section className="relative min-h-[85vh] sm:min-h-[90vh] flex items-center justify-center overflow-hidden" onTouchStart={onTS} onTouchMove={onTM} onTouchEnd={onTE}>

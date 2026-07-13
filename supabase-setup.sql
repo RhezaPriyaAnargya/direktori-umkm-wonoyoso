@@ -1,0 +1,141 @@
+-- ============================================
+-- SQL Setup untuk Direktori UMKM Wonoyoso
+-- Jalankan di Supabase SQL Editor
+-- ============================================
+
+-- 1. Buat tabel umkm
+CREATE TABLE IF NOT EXISTS umkm (
+  id TEXT PRIMARY KEY,
+  nama TEXT NOT NULL,
+  kategori TEXT NOT NULL,
+  deskripsi TEXT NOT NULL,
+  foto TEXT NOT NULL,
+  galeri TEXT[] DEFAULT '{}',
+  jam_buka TEXT,
+  lokasi TEXT,
+  gmaps_embed TEXT,
+  gmaps_link TEXT,
+  wa TEXT,
+  instagram TEXT,
+  tiktok TEXT,
+  facebook TEXT,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- 2. Enable RLS (Row Level Security)
+ALTER TABLE umkm ENABLE ROW LEVEL SECURITY;
+
+-- 3. Policy: Semua orang bisa membaca data UMKM (publik)
+CREATE POLICY "Public can read umkm" ON umkm
+  FOR SELECT USING (true);
+
+-- 4. Policy: Hanya user yang sudah login (authenticated) bisa insert/update/delete
+CREATE POLICY "Authenticated users can insert umkm" ON umkm
+  FOR INSERT TO authenticated WITH CHECK (true);
+
+CREATE POLICY "Authenticated users can update umkm" ON umkm
+  FOR UPDATE TO authenticated USING (true) WITH CHECK (true);
+
+CREATE POLICY "Authenticated users can delete umkm" ON umkm
+  FOR DELETE TO authenticated USING (true);
+
+-- 5. Seed data awal dari umkm.json
+INSERT INTO umkm (id, nama, kategori, deskripsi, foto, galeri, jam_buka, lokasi, gmaps_embed, gmaps_link, wa, instagram) VALUES
+(
+  'umkm-001',
+  'Elbika Snack',
+  'Kuliner',
+  'Pilihan tepat untuk segala acara! Elbika Snack melayani pesanan katering aneka masakan Nusantara seperti tumpeng, baceman meresap, hingga berbagai olahan ayam. Kami juga melayani pelanggan harian melalui kedai makanan yang menyajikan sajian lezat mulai dari ayam geprek, mie ayam, hingga makanan ringan seperti basreng, tahu crispy serta minuman yang menyegarkan.',
+  '/images/elbika_snack/elbika_snack_1.jpg',
+  ARRAY['/images/elbika_snack/elbika_snack_1.jpg', '/images/elbika_snack/elbika_snack_2.jpg', '/images/elbika_snack/elbika_snack_3.jpg', '/images/elbika_snack/elbika_snack_4.jpg', '/images/elbika_snack/elbika_snack_5.jpg', '/images/elbika_snack/elbika_snack_6.jpg', '/images/elbika_snack/elbika_snack_7.jpg'],
+  'Senin - Minggu (07.00 - 20.00 WIB)',
+  'Dsn. Wonoyoso, Wonosobo',
+  'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3637.92477062938!2d109.88241989799302!3d-7.319920133887922!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e700bed07c897b5%3A0x72a24fcbf5d127c6!2sELBIKA%20SNACK!5e1!3m2!1sid!2sid!4v1783492272211!5m2!1sid!2sid',
+  'https://maps.app.goo.gl/Ssf6TfN4e6a628ZL6',
+  '6285339021056',
+  '@kedaielbika'
+),
+(
+  'umkm-002',
+  'Mr. Carica',
+  'Kuliner',
+  'Mr. Carica adalah spesialis manisan dan sirup buah carica asli sejak tahun 2016. Dibuat dari buah pilihan dengan manis yang pas, sangat cocok untuk oleh-oleh atau dinikmati bersama keluarga. Sajikan saat dingin, karena sensasinya ''berasa di Dieng kalo diminum pas dingin!''',
+  '/images/mr_carica/mr_carica_1.jpg',
+  ARRAY['/images/mr_carica/mr_carica_1.jpg', '/images/mr_carica/mr_carica_2.jpg', '/images/mr_carica/mr_carica_3.jpg'],
+  'Senin - Minggu (06.00 - 22.00 WIB)',
+  'Dsn. Wonoyoso, Wonosobo',
+  'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d675.7128274052138!2d109.88563259276981!3d-7.321662617045378!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e700b26c723bcab%3A0x40e730b599efb699!2sMr.Carica%20Factory%20Outlet!5e1!3m2!1sid!2sid!4v1783495625636!5m2!1sid!2sid',
+  'https://maps.app.goo.gl/8tzNmvPajCiuiiLN9',
+  '6282243898442',
+  '@mrcaricawonosobo'
+),
+(
+  'umkm-003',
+  'Ghanim snack',
+  'Kuliner',
+  'Ghanim Snack hadir sebagai Pusat Cemilan Renyah di Wonoyoso. Kami memproduksi dan menyediakan berbagai pilihan makanan ringan yang cocok untuk sajian tamu maupun konsumsi harian. Tersedia beraneka ragam produk camilan, mulai dari ragam kue kering dengan rasa manis hingga asin, combro, aneka stik, serta keripik bakso. Ghanim Snack senantiasa mengedepankan kualitas dan kerenyahan pada setiap produk yang disajikan',
+  '/images/ghanim_snack/ghanim_snack_1.jpeg',
+  ARRAY['/images/ghanim_snack/ghanim_snack_1.jpeg', '/images/ghanim_snack/ghanim_snack_2.jpeg', '/images/ghanim_snack/ghanim_snack_3.jpeg', '/images/ghanim_snack/ghanim_snack_4.jpeg', '/images/ghanim_snack/ghanim_snack_5.jpeg', '/images/ghanim_snack/ghanim_snack_6.jpeg', '/images/ghanim_snack/ghanim_snack_7.jpeg', '/images/ghanim_snack/ghanim_snack_8.jpg'],
+  'Senin - Minggu (08.00 - 17.00 WIB)',
+  'Dsn. Wonoyoso, Wonosobo',
+  'https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d192.9048324421619!2d109.88590275381047!3d-7.321686841625037!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e7aa114192124b5%3A0xc53f79e3c4fe714c!2sGhanim%20Snack!5e1!3m2!1sid!2sid!4v1783686532075!5m2!1sid!2sid',
+  'https://maps.app.goo.gl/DmYhp9A1hZUmp3vR8',
+  '6285713472585',
+  '@ghanimsnack_'
+),
+(
+  'umkm-004',
+  'Mug Custom Wonosobo',
+  'Kerajinan & Jasa',
+  'Berdiri sejak tahun 2020 dengan mengusung slogan ''Produk Lokal, Kualitas Import'', Mug Custom Wonosobo adalah solusi tepat untuk kebutuhan suvenir dan merchandise Anda. Kami menyediakan berbagai pilihan media cetak berkualitas, mulai dari Mug Import Premium, Tumbler, Cangkir, Mug Enamel, hingga Mug Bunglon unik yang dapat berubah warna saat dituang air panas. Kami memberikan layanan terbaik dengan harga bersaing. Keunggulan kami meliputi proses pengerjaan yang sangat cepat (bisa ditunggu), fleksibilitas pesanan tanpa minimal order (bisa satuan) hingga kesiapan menangani pesanan partai besar. Setiap pemesanan juga sudah termasuk fasilitas gratis dus kemasan.',
+  '/images/mug_custom_wonosobo/mug_custom_wonosobo_1.png',
+  ARRAY['/images/mug_custom_wonosobo/mug_custom_wonosobo_1.png', '/images/mug_custom_wonosobo/mug_custom_wonosobo_2.png', '/images/mug_custom_wonosobo/mug_custom_wonosobo_3.png', '/images/mug_custom_wonosobo/mug_custom_wonosobo_4.png', '/images/mug_custom_wonosobo/mug_custom_wonosobo_5.png'],
+  'Senin - Minggu (09.00 - 22.00 WIB)',
+  'Dsn. Wonoyoso, Wonosobo',
+  'https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d1929.692336731996!2d109.8841806!3d-7.3217047!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e700bf2fa9ee231%3A0x5ffcbe231bd1925e!2sMUG%20CUSTOM%20WONOSOBO!5e1!3m2!1sid!2sid!4v1783670181788!5m2!1sid!2sid',
+  'https://maps.app.goo.gl/3FsNPvGfwqAckhMV8',
+  '6281314273648',
+  '@mugcustom_wonosobo'
+),
+(
+  'umkm-005',
+  'Warung Teras Lia',
+  'Kuliner',
+  'Warung Teras Lia hadir menawarkan perpaduan menu camilan ringan hingga makanan berat yang siap menggugah selera Anda. Bagi pencinta camilan dengan cita rasa pedas dan gurih, kami menyediakan menu populer seperti pangsit chili oil, makaroni chili oil, serta opak renyah. Selain camilan, kami juga menyajikan hidangan berat seperti bakso hangat yang lezat dan mengenyangkan. Warung Teras Lia adalah pilihan tepat untuk bersantai maupun bersantap ria.',
+  '/images/warung_teras_lia/warung_teras_lia_1.jpeg',
+  ARRAY['/images/warung_teras_lia/warung_teras_lia_1.jpeg', '/images/warung_teras_lia/warung_teras_lia_2.jpeg', '/images/warung_teras_lia/warung_teras_lia_3.jpeg', '/images/warung_teras_lia/warung_teras_lia_4.jpeg', '/images/warung_teras_lia/warung_teras_lia_5.jpg', '/images/warung_teras_lia/warung_teras_lia_6.jpg'],
+  'Senin - Minggu (10.00 - 18.00 WIB)',
+  'Dsn. Wonoyoso, Wonosobo',
+  'https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d3854.2299482808135!2d109.88149647500026!3d-7.3219370926862295!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zN8KwMTknMTkuMCJTIDEwOcKwNTMnMDIuNyJF!5e1!3m2!1sen!2sid!4v1783740332827!5m2!1sen!2sid',
+  'https://maps.app.goo.gl/HuJqESa313KGGq7y9',
+  '6282241162260',
+  NULL
+),
+(
+  'umkm-006',
+  'Ping jet Wonoyoso',
+  'Kuliner',
+  'Ping Jet, singkatan dari Emping Dipejet, merupakan produk camilan kebanggaan lokal yang diolah dari singkong berkualitas. Melalui proses pengolahan yang tepat, Ping Jet menghasilkan tekstur emping yang sangat renyah. Tersedia dalam dua varian rasa utama, yaitu original yang gurih dan pedas, camilan ini cocok untuk dinikmati dalam berbagai kesempatan. Berkat konsistensi dalam menjaga kualitas rasa dan pengemasan, Ping Jet tidak hanya diminati oleh pasar lokal, tetapi juga telah sukses memperluas jangkauan penjualannya hingga menembus pasar internasional.',
+  '/images/pingjet_wonoyoso/pingjet_wonoyoso_1.jpg',
+  ARRAY['/images/pingjet_wonoyoso/pingjet_wonoyoso_1.jpg', '/images/pingjet_wonoyoso/pingjet_wonoyoso_2.jpg', '/images/pingjet_wonoyoso/pingjet_wonoyoso_3.jpg'],
+  'Senin - Minggu (10.00 - 16.00 WIB)',
+  'Dsn. Wonoyoso, Wonosobo',
+  'https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d3854.2350131922117!2d109.88118357500029!3d-7.321351092686795!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zN8KwMTknMTYuOSJTIDEwOcKwNTMnMDEuNSJF!5e1!3m2!1sen!2sid!4v1783738922647!5m2!1sen!2sid',
+  'https://maps.app.goo.gl/HZJvgA2HP7HtzAeC6',
+  '6289603812157',
+  '@pingjet_wonoyoso'
+),
+(
+  'umkm-007',
+  'Megana_sore',
+  'Kuliner',
+  'Megana Sore menyajikan kuliner tradisional autentik khas Wonosobo, yakni Nasi Megana. Hidangan gurih bernuansa lokal ini sangat direkomendasikan untuk dinikmati bersama pasangan klasiknya, yaitu tempe kemul renyah yang disajikan hangat.',
+  '/images/megana_sore/megana_sore_1.jpg',
+  ARRAY['/images/megana_sore/megana_sore_1.jpg', '/images/megana_sore/megana_sore_2.jpg', '/images/megana_sore/megana_sore_3.jpg', '/images/megana_sore/megana_sore_4.jpg'],
+  'Senin - Minggu (16.00 - 19.00 WIB)',
+  'Dsn. Wonoyoso, Wonosobo',
+  'https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d3854.2361799661967!2d109.88144297500034!3d-7.3212160926869245!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zN8KwMTknMTYuNCJTIDEwOcKwNTMnMDIuNSJF!5e1!3m2!1sen!2sid!4v1783739079447!5m2!1sen!2sid',
+  'https://maps.app.goo.gl/zLYiHereLbHifLgv5',
+  '62895402519493',
+  NULL
+);

@@ -1,23 +1,23 @@
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import umkmData from "@/data/umkm.json";
+import { getAllUmkm, getUmkmById, getAllUmkmIds } from "@/lib/umkm";
 import ButtonWA from "@/components/ButtonWA";
 import MapEmbed from "@/components/MapEmbed";
 import ImageCarousel from "@/components/ImageCarousel";
 import RelatedUmkm from "@/components/RelatedUmkm";
 
+export const revalidate = 60;
+
 // Generate static params for SSG
 export async function generateStaticParams() {
-  return umkmData.map((umkm) => ({
-    id: umkm.id,
-  }));
+  return await getAllUmkmIds();
 }
 
 // Generate metadata per page
 export async function generateMetadata({ params }) {
   const { id } = await params;
-  const umkm = umkmData.find((u) => u.id === id);
+  const umkm = await getUmkmById(id);
 
   if (!umkm) {
     return { title: "UMKM Tidak Ditemukan" };
@@ -47,11 +47,13 @@ function getCategoryBadgeClass(kategori) {
 
 export default async function UmkmDetailPage({ params }) {
   const { id } = await params;
-  const umkm = umkmData.find((u) => u.id === id);
+  const umkm = await getUmkmById(id);
 
   if (!umkm) {
     notFound();
   }
+
+  const allData = await getAllUmkm();
 
   return (
     <div className="min-h-screen bg-surface">
@@ -240,7 +242,7 @@ export default async function UmkmDetailPage({ params }) {
       <RelatedUmkm
         currentId={umkm.id}
         kategori={umkm.kategori}
-        allData={umkmData}
+        allData={allData}
       />
     </div>
   );

@@ -1,7 +1,5 @@
 "use client";
 
-import umkmData from "@/data/umkm.json";
-
 const CATEGORY_CONFIG = [
   { name: "Kuliner", icon: "🍽️", color: "#ef4444", bgColor: "#fef2f2" },
   { name: "Kerajinan", icon: "🎨", color: "#3b82f6", bgColor: "#eff6ff" },
@@ -9,7 +7,7 @@ const CATEGORY_CONFIG = [
   { name: "Pertanian", icon: "🌿", color: "#16a34a", bgColor: "#f0fdf4" },
 ];
 
-export default function KategoriUmkm() {
+export default function KategoriUmkm({ umkmData = [] }) {
   const categoryCounts = CATEGORY_CONFIG.map((cat) => ({
     ...cat,
     count: umkmData.filter((u) => u.kategori.toLowerCase().includes(cat.name.toLowerCase())).length,
