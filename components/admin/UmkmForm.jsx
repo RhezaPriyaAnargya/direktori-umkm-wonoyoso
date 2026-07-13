@@ -37,6 +37,11 @@ export default function UmkmForm({ initialData = null, onSubmit }) {
   const handleFotoChange = (e) => {
     const file = e.target.files[0];
     if (file) {
+      if (!file.type.startsWith("image/")) {
+        setError("File Foto Utama harus berupa gambar (JPEG, PNG, WebP, dll).");
+        return;
+      }
+      setError("");
       setFotoFile(file);
       setFotoPreview(URL.createObjectURL(file));
     }
@@ -44,11 +49,21 @@ export default function UmkmForm({ initialData = null, onSubmit }) {
 
   const handleGaleriChange = (e) => {
     const files = Array.from(e.target.files);
-    setGaleriFiles((prev) => [...prev, ...files]);
-    setGaleriPreviews((prev) => [
-      ...prev,
-      ...files.map((f) => URL.createObjectURL(f)),
-    ]);
+    const validFiles = files.filter((f) => f.type.startsWith("image/"));
+    
+    if (validFiles.length !== files.length) {
+      setError("Beberapa file ditolak karena bukan format gambar.");
+    } else {
+      setError("");
+    }
+
+    if (validFiles.length > 0) {
+      setGaleriFiles((prev) => [...prev, ...validFiles]);
+      setGaleriPreviews((prev) => [
+        ...prev,
+        ...validFiles.map((f) => URL.createObjectURL(f)),
+      ]);
+    }
   };
 
   const removeGaleriItem = (index) => {
@@ -62,6 +77,10 @@ export default function UmkmForm({ initialData = null, onSubmit }) {
   };
 
   const uploadFile = async (file, path) => {
+    if (!file.type.startsWith("image/")) {
+      throw new Error(`File ${file.name} bukan format gambar yang valid.`);
+    }
+
     const ext = file.name.split(".").pop();
     const fileName = `${path}/${Date.now()}_${Math.random().toString(36).slice(2)}.${ext}`;
 
