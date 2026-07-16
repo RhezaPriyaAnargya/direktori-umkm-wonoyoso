@@ -288,7 +288,7 @@ export default function UmkmForm({ initialData = null, onSubmit }) {
       {/* Social Media */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div>
-          <label className="block text-sm font-semibold text-text-primary mb-2">Instagram</label>
+          <label className="block text-sm font-semibold text-text-primary mb-2">Instagram <span className="font-normal text-text-muted">(Opsional)</span></label>
           <input
             name="instagram"
             value={form.instagram}
@@ -298,7 +298,7 @@ export default function UmkmForm({ initialData = null, onSubmit }) {
           />
         </div>
         <div>
-          <label className="block text-sm font-semibold text-text-primary mb-2">TikTok</label>
+          <label className="block text-sm font-semibold text-text-primary mb-2">TikTok <span className="font-normal text-text-muted">(Opsional)</span></label>
           <input
             name="tiktok"
             value={form.tiktok}
@@ -308,7 +308,7 @@ export default function UmkmForm({ initialData = null, onSubmit }) {
           />
         </div>
         <div>
-          <label className="block text-sm font-semibold text-text-primary mb-2">Facebook</label>
+          <label className="block text-sm font-semibold text-text-primary mb-2">Facebook <span className="font-normal text-text-muted">(Opsional)</span></label>
           <input
             name="facebook"
             value={form.facebook}
