@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
+import { ToastProvider } from "@/components/admin/Toast";
 
 export default function AdminLayout({ children }) {
   const [user, setUser] = useState(null);
@@ -73,6 +74,7 @@ export default function AdminLayout({ children }) {
   ];
 
   return (
+    <ToastProvider>
     <div className="min-h-screen bg-gray-50">
       {/* Mobile Header */}
       <div className="lg:hidden fixed top-0 left-0 right-0 z-50 bg-white border-b border-border h-14 flex items-center justify-between px-4">
@@ -151,5 +153,6 @@ export default function AdminLayout({ children }) {
         </div>
       </main>
     </div>
+    </ToastProvider>
   );
 }

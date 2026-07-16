@@ -5,10 +5,12 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import BeritaForm from "@/components/admin/BeritaForm";
 import { supabase } from "@/lib/supabase";
+import { useToast } from "@/components/admin/Toast";
 
 export default function TambahBeritaPage() {
   const router = useRouter();
   const [umkmList, setUmkmList] = useState([]);
+  const showToast = useToast();
 
   useEffect(() => {
     const fetchUmkm = async () => {
@@ -24,9 +26,13 @@ export default function TambahBeritaPage() {
   const handleSubmit = async (data) => {
     const { error } = await supabase.from("berita").insert([data]);
 
-    if (error) throw error;
+    if (error) {
+      showToast("Gagal menambah berita: " + error.message, "error");
+      throw error;
+    }
 
-    router.push("/admin/berita");
+    showToast("Berita berhasil dipublikasikan! 📰", "success");
+    setTimeout(() => router.push("/admin/berita"), 1500);
   };
 
   return (

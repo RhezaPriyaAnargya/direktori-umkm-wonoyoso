@@ -5,6 +5,7 @@ import { useRouter, useParams } from "next/navigation";
 import Link from "next/link";
 import BeritaForm from "@/components/admin/BeritaForm";
 import { supabase } from "@/lib/supabase";
+import { useToast } from "@/components/admin/Toast";
 
 export default function EditBeritaPage() {
   const router = useRouter();
@@ -12,6 +13,7 @@ export default function EditBeritaPage() {
   const [berita, setBerita] = useState(null);
   const [umkmList, setUmkmList] = useState([]);
   const [loading, setLoading] = useState(true);
+  const showToast = useToast();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -21,7 +23,7 @@ export default function EditBeritaPage() {
       ]);
 
       if (beritaRes.error) {
-        alert("Berita tidak ditemukan");
+        showToast("Berita tidak ditemukan", "error");
         router.push("/admin/berita");
         return;
       }
@@ -31,7 +33,7 @@ export default function EditBeritaPage() {
       setLoading(false);
     };
     fetchData();
-  }, [params.id, router]);
+  }, [params.id, router, showToast]);
 
   const handleSubmit = async (data) => {
     const { error } = await supabase
@@ -39,9 +41,13 @@ export default function EditBeritaPage() {
       .update(data)
       .eq("id", params.id);
 
-    if (error) throw error;
+    if (error) {
+      showToast("Gagal mengupdate berita: " + error.message, "error");
+      throw error;
+    }
 
-    router.push("/admin/berita");
+    showToast("Berita berhasil diperbarui! ✅", "success");
+    setTimeout(() => router.push("/admin/berita"), 1500);
   };
 
   if (loading) {

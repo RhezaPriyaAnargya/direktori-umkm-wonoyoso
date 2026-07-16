@@ -4,11 +4,13 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { supabase } from "@/lib/supabase";
+import { useToast } from "@/components/admin/Toast";
 
 export default function AdminDashboard() {
   const [umkmList, setUmkmList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [deleting, setDeleting] = useState(null);
+  const showToast = useToast();
 
   const fetchData = async () => {
     setLoading(true);
@@ -32,9 +34,10 @@ export default function AdminDashboard() {
     const { error } = await supabase.from("umkm").delete().eq("id", id);
 
     if (error) {
-      alert("Gagal menghapus: " + error.message);
+      showToast("Gagal menghapus: " + error.message, "error");
     } else {
       setUmkmList((prev) => prev.filter((u) => u.id !== id));
+      showToast(`UMKM "${nama}" berhasil dihapus`, "success");
     }
     setDeleting(null);
   };

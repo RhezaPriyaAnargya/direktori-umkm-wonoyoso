@@ -4,9 +4,11 @@ import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import UmkmForm from "@/components/admin/UmkmForm";
 import Link from "next/link";
+import { useToast } from "@/components/admin/Toast";
 
 export default function TambahUmkmPage() {
   const router = useRouter();
+  const showToast = useToast();
 
   const handleSubmit = async (data) => {
     // Generate ID
@@ -30,10 +32,12 @@ export default function TambahUmkmPage() {
     });
 
     if (error) {
+      showToast("Gagal menambah UMKM: " + error.message, "error");
       throw new Error("Gagal menambah UMKM: " + error.message);
     }
 
-    router.push("/admin");
+    showToast("UMKM berhasil ditambahkan! 🎉", "success");
+    setTimeout(() => router.push("/admin"), 1500);
   };
 
   return (

@@ -4,11 +4,13 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { supabase } from "@/lib/supabase";
+import { useToast } from "@/components/admin/Toast";
 
 export default function AdminBeritaPage() {
   const [beritaList, setBeritaList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [deleting, setDeleting] = useState(null);
+  const showToast = useToast();
 
   const fetchData = async () => {
     setLoading(true);
@@ -32,9 +34,10 @@ export default function AdminBeritaPage() {
     const { error } = await supabase.from("berita").delete().eq("id", id);
 
     if (error) {
-      alert("Gagal menghapus: " + error.message);
+      showToast("Gagal menghapus berita: " + error.message, "error");
     } else {
       setBeritaList((prev) => prev.filter((b) => b.id !== id));
+      showToast(`Berita "${judul}" berhasil dihapus`, "success");
     }
     setDeleting(null);
   };

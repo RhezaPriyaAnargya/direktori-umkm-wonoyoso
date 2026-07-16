@@ -5,12 +5,14 @@ import { useRouter, useParams } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import UmkmForm from "@/components/admin/UmkmForm";
 import Link from "next/link";
+import { useToast } from "@/components/admin/Toast";
 
 export default function EditUmkmPage() {
   const [umkm, setUmkm] = useState(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
   const params = useParams();
+  const showToast = useToast();
 
   useEffect(() => {
     const fetchUmkm = async () => {
@@ -21,7 +23,7 @@ export default function EditUmkmPage() {
         .single();
 
       if (error || !data) {
-        alert("Data UMKM tidak ditemukan");
+        showToast("Data UMKM tidak ditemukan", "error");
         router.push("/admin");
         return;
       }
@@ -31,7 +33,7 @@ export default function EditUmkmPage() {
     };
 
     fetchUmkm();
-  }, [params.id, router]);
+  }, [params.id, router, showToast]);
 
   const handleSubmit = async (data) => {
     const { error } = await supabase
@@ -40,10 +42,12 @@ export default function EditUmkmPage() {
       .eq("id", params.id);
 
     if (error) {
+      showToast("Gagal mengupdate UMKM: " + error.message, "error");
       throw new Error("Gagal mengupdate UMKM: " + error.message);
     }
 
-    router.push("/admin");
+    showToast("Data UMKM berhasil diperbarui! ✅", "success");
+    setTimeout(() => router.push("/admin"), 1500);
   };
 
   if (loading) {

@@ -24,9 +24,10 @@ export default function Navbar() {
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16 sm:h-18">
-          <Link href="/" className="flex items-center gap-2.5 group">
-            <div className="w-12 h-12 flex items-center justify-center transition-all duration-300 drop-shadow-md">
+        <div className="flex items-center justify-between h-14 sm:h-16">
+          {/* Logo — more compact on mobile */}
+          <Link href="/" className="flex items-center gap-2 group shrink-0">
+            <div className="w-9 h-9 sm:w-12 sm:h-12 flex items-center justify-center transition-all duration-300 drop-shadow-md">
               <Image 
                 src="/images/logo-wonosobo.png" 
                 alt="Logo Wonosobo" 
@@ -36,19 +37,21 @@ export default function Navbar() {
               />
             </div>
             <div className="flex flex-col">
-              <span className={`text-base font-bold leading-tight transition-colors duration-300 ${scrolled ? "text-text-primary" : "text-white"}`}>
+              <span className={`text-sm sm:text-base font-bold leading-tight transition-colors duration-300 ${scrolled ? "text-text-primary" : "text-white"}`}>
                 UMKM Wonoyoso
               </span>
-              <span className={`text-[10px] font-medium leading-tight transition-colors duration-300 ${scrolled ? "text-text-muted" : "text-white/70"}`}>
+              {/* Hide subtitle on mobile to save space */}
+              <span className={`hidden sm:block text-[10px] font-medium leading-tight transition-colors duration-300 ${scrolled ? "text-text-muted" : "text-white/70"}`}>
                 Direktori Usaha Dusun
               </span>
             </div>
           </Link>
 
-          <div className="flex items-center gap-3">
+          {/* Nav links — tighter padding on mobile */}
+          <div className="flex items-center gap-1 sm:gap-3">
             <Link
               href="/"
-              className={`text-sm font-medium px-4 py-2 rounded-full transition-all duration-300 ${
+              className={`text-sm font-medium px-3 py-1.5 sm:px-4 sm:py-2 rounded-full transition-all duration-300 ${
                 scrolled
                   ? "text-text-secondary hover:text-primary hover:bg-primary/5"
                   : "text-white/90 hover:text-white hover:bg-white/10"
@@ -58,7 +61,7 @@ export default function Navbar() {
             </Link>
             <Link
               href="/berita"
-              className={`text-sm font-medium px-4 py-2 rounded-full transition-all duration-300 ${
+              className={`text-sm font-medium px-3 py-1.5 sm:px-4 sm:py-2 rounded-full transition-all duration-300 ${
                 scrolled
                   ? "text-text-secondary hover:text-primary hover:bg-primary/5"
                   : "text-white/90 hover:text-white hover:bg-white/10"
@@ -68,7 +71,7 @@ export default function Navbar() {
             </Link>
             <a
               href="#katalog"
-              className={`text-sm font-medium px-4 py-2 rounded-full transition-all duration-300 ${
+              className={`text-sm font-medium px-3 py-1.5 sm:px-4 sm:py-2 rounded-full transition-all duration-300 ${
                 scrolled
                   ? "bg-primary text-white hover:bg-primary-dark shadow-sm"
                   : "bg-white/15 text-white hover:bg-white/25 backdrop-blur-sm"
