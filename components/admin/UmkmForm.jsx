@@ -3,6 +3,7 @@
 import { useState, useRef } from "react";
 import Image from "next/image";
 import { supabase } from "@/lib/supabase";
+import ImageCropper from "./ImageCropper";
 
 export default function UmkmForm({ initialData = null, onSubmit }) {
   const [form, setForm] = useState({
@@ -28,6 +29,10 @@ export default function UmkmForm({ initialData = null, onSubmit }) {
   const fotoRef = useRef(null);
   const galeriRef = useRef(null);
 
+  // State untuk antrean crop
+  const [currentCrop, setCurrentCrop] = useState(null); 
+  const [cropQueue, setCropQueue] = useState([]);
+
   const CATEGORIES = ["Kuliner", "Kerajinan", "Jasa", "Pertanian", "Kerajinan & Jasa"];
 
   const handleChange = (e) => {
@@ -52,8 +57,10 @@ export default function UmkmForm({ initialData = null, onSubmit }) {
         return;
       }
       setError("");
-      setFotoFile(file);
-      setFotoPreview(URL.createObjectURL(file));
+      // Jangan langsung simpan, masukkan ke state crop dulu
+      setCurrentCrop({ type: 'foto', url: URL.createObjectURL(file), originalFile: file });
+      // Reset input agar bisa memilih file yang sama lagi jika batal
+      e.target.value = "";
     }
   };
 
@@ -68,11 +75,44 @@ export default function UmkmForm({ initialData = null, onSubmit }) {
     }
 
     if (validFiles.length > 0) {
-      setGaleriFiles((prev) => [...prev, ...validFiles]);
-      setGaleriPreviews((prev) => [
-        ...prev,
-        ...validFiles.map((f) => URL.createObjectURL(f)),
-      ]);
+      const newQueue = validFiles.map(f => ({ type: 'galeri', url: URL.createObjectURL(f), originalFile: f }));
+      
+      if (!currentCrop) {
+        setCurrentCrop(newQueue[0]);
+        setCropQueue(prev => [...prev, ...newQueue.slice(1)]);
+      } else {
+        setCropQueue(prev => [...prev, ...newQueue]);
+      }
+    }
+    // Reset input
+    e.target.value = "";
+  };
+
+  const handleCropComplete = (croppedFile) => {
+    if (currentCrop.type === 'foto') {
+      setFotoFile(croppedFile);
+      setFotoPreview(URL.createObjectURL(croppedFile));
+    } else {
+      setGaleriFiles((prev) => [...prev, croppedFile]);
+      setGaleriPreviews((prev) => [...prev, URL.createObjectURL(croppedFile)]);
+    }
+    
+    // Lanjut ke antrean berikutnya jika ada
+    if (cropQueue.length > 0) {
+      setCurrentCrop(cropQueue[0]);
+      setCropQueue((prev) => prev.slice(1));
+    } else {
+      setCurrentCrop(null);
+    }
+  };
+
+  const handleCropCancel = () => {
+    // Lewati file ini, lanjut ke antrean berikutnya jika ada
+    if (cropQueue.length > 0) {
+      setCurrentCrop(cropQueue[0]);
+      setCropQueue((prev) => prev.slice(1));
+    } else {
+      setCurrentCrop(null);
     }
   };
 
@@ -152,6 +192,16 @@ export default function UmkmForm({ initialData = null, onSubmit }) {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6 max-w-3xl">
+      
+      {/* Overlay Cropper */}
+      {currentCrop && (
+        <ImageCropper 
+          imageSrc={currentCrop.url}
+          aspectRatio={currentCrop.type === 'foto' ? 16/9 : 4/3}
+          onCropComplete={handleCropComplete}
+          onCancel={handleCropCancel}
+        />
+      )}
       {error && (
         <div className="bg-red-50 border border-red-200 text-red-700 text-sm px-4 py-3 rounded-xl">
           {error}
@@ -160,7 +210,7 @@ export default function UmkmForm({ initialData = null, onSubmit }) {
 
       {/* Nama */}
       <div>
-        <label className="block text-sm font-semibold text-text-primary mb-2">Nama Usaha *</label>
+        <label className="block text-sm font-semibold text-text-primary mb-2">Nama Usaha <span className="text-red-500">*</span></label>
         <input
           name="nama"
           value={form.nama}
@@ -173,7 +223,7 @@ export default function UmkmForm({ initialData = null, onSubmit }) {
 
       {/* Kategori */}
       <div>
-        <label className="block text-sm font-semibold text-text-primary mb-2">Kategori *</label>
+        <label className="block text-sm font-semibold text-text-primary mb-2">Kategori <span className="text-red-500">*</span></label>
         <select
           name="kategori"
           value={form.kategori}
@@ -188,7 +238,8 @@ export default function UmkmForm({ initialData = null, onSubmit }) {
 
       {/* Deskripsi */}
       <div>
-        <label className="block text-sm font-semibold text-text-primary mb-2">Deskripsi *</label>
+        <label className="block text-sm font-semibold text-text-primary mb-1">Deskripsi <span className="text-red-500">*</span></label>
+        <p className="text-xs text-text-muted mb-3 font-normal">Isi dengan produk/jasa apa yang dijual beserta keunggulannya.</p>
         <textarea
           name="deskripsi"
           value={form.deskripsi}
@@ -202,8 +253,9 @@ export default function UmkmForm({ initialData = null, onSubmit }) {
 
       {/* Foto Utama */}
       <div>
-        <label className="block text-sm font-semibold text-text-primary mb-2">Foto Utama {!initialData && "*"}</label>
-        <input ref={fotoRef} type="file" accept="image/*" onChange={handleFotoChange} className="hidden" />
+        <label className="block text-sm font-semibold text-text-primary mb-1">Foto Utama {!initialData && <span className="text-red-500">*</span>}</label>
+        <p className="text-xs text-text-muted mb-3">Format yang didukung: JPG, PNG, WebP (Maks. 5MB). Kamu bisa langsung mengambil dari kamera.</p>
+        <input ref={fotoRef} type="file" accept="image/jpeg, image/png, image/webp" onChange={handleFotoChange} className="hidden" />
         <div className="flex items-start gap-4">
           {fotoPreview && (
             <div className="w-32 h-32 rounded-xl overflow-hidden bg-gray-100 relative flex-shrink-0">
@@ -222,8 +274,9 @@ export default function UmkmForm({ initialData = null, onSubmit }) {
 
       {/* Galeri */}
       <div>
-        <label className="block text-sm font-semibold text-text-primary mb-2">Galeri Foto</label>
-        <input ref={galeriRef} type="file" accept="image/*" multiple onChange={handleGaleriChange} className="hidden" />
+        <label className="block text-sm font-semibold text-text-primary mb-1">Galeri Foto</label>
+        <p className="text-xs text-text-muted mb-3">Pilih beberapa foto sekaligus untuk menampilkan produk/suasana tempat.</p>
+        <input ref={galeriRef} type="file" accept="image/jpeg, image/png, image/webp" multiple onChange={handleGaleriChange} className="hidden" />
         <div className="flex flex-wrap gap-3 mb-3">
           {galeriPreviews.map((url, i) => (
             <div key={i} className="relative w-24 h-24 rounded-lg overflow-hidden bg-gray-100 group">
