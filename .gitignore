@@ -42,3 +42,8 @@ next-env.d.ts
 
 # catatan pribadi developer
 Rangkuman_Project.md
+AGENTS.md
+CLAUDE.md
+
+# database scripts
+*.sql

@@ -222,9 +222,9 @@ export default function BottomNav() {
               <span className="text-[10px] font-medium text-primary mt-0.5">Cari</span>
             </button>
 
-            {/* Toko */}
-            <a
-              href="#katalog"
+            {/* Berita */}
+            <Link
+              href="/berita"
               className="bottom-nav-item"
             >
               <svg
@@ -233,15 +233,14 @@ export default function BottomNav() {
                 fill="currentColor"
                 className="w-6 h-6"
               >
-                <path d="M5.223 2.25h13.554a2.25 2.25 0 012.03 1.278l1.83 3.825a.25.25 0 01-.036.28 5.001 5.001 0 01-3.517 2.117H4.916A5.001 5.001 0 011.4 7.633a.25.25 0 01-.036-.28l1.83-3.825A2.25 2.25 0 015.223 2.25z" />
                 <path
                   fillRule="evenodd"
-                  d="M3 20.25v-8.755c1.42.674 3.08.674 4.5 0A5.956 5.956 0 0012 12.75a5.956 5.956 0 004.5-1.255c1.42.674 3.08.674 4.5 0v8.755h1.5a.75.75 0 010 1.5H1.5a.75.75 0 010-1.5H3zm4.5-4.5a.75.75 0 01.75-.75h7.5a.75.75 0 01.75.75v3.75h-9v-3.75z"
+                  d="M4.125 3C3.089 3 2.25 3.84 2.25 4.875V18a3 3 0 003 3h12.75a3 3 0 003-3V4.875C21 3.839 20.16 3 19.125 3H4.125zM12 9.75a.75.75 0 000 1.5h4.5a.75.75 0 000-1.5H12zm-5.625 3.75a.75.75 0 000 1.5h9.75a.75.75 0 000-1.5h-9.75zM6.375 18a.75.75 0 000 1.5h9.75a.75.75 0 000-1.5h-9.75z"
                   clipRule="evenodd"
                 />
               </svg>
-              <span className="text-[10px] font-medium mt-0.5">Toko</span>
-            </a>
+              <span className="text-[10px] font-medium mt-0.5">Berita</span>
+            </Link>
 
             {/* Kategori */}
             <a

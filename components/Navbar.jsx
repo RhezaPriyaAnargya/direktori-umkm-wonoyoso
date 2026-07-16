@@ -56,6 +56,16 @@ export default function Navbar() {
             >
               Beranda
             </Link>
+            <Link
+              href="/berita"
+              className={`text-sm font-medium px-4 py-2 rounded-full transition-all duration-300 ${
+                scrolled
+                  ? "text-text-secondary hover:text-primary hover:bg-primary/5"
+                  : "text-white/90 hover:text-white hover:bg-white/10"
+              }`}
+            >
+              Berita
+            </Link>
             <a
               href="#katalog"
               className={`text-sm font-medium px-4 py-2 rounded-full transition-all duration-300 ${

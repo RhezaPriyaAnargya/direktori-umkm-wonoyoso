@@ -150,6 +150,7 @@ export default async function UmkmDetailPage({ params }) {
                 embedUrl={umkm.gmaps_embed}
                 mapsLink={umkm.gmaps_link}
                 namaUmkm={umkm.nama}
+                lokasi={umkm.lokasi}
               />
             </div>
           </div>

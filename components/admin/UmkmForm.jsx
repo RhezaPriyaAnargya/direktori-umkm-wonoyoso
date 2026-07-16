@@ -31,7 +31,17 @@ export default function UmkmForm({ initialData = null, onSubmit }) {
   const CATEGORIES = ["Kuliner", "Kerajinan", "Jasa", "Pertanian", "Kerajinan & Jasa"];
 
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    let value = e.target.value;
+    
+    // Auto-extract URL jika admin mem-paste seluruh kode <iframe>
+    if (e.target.name === "gmaps_embed" && value.includes("<iframe")) {
+      const match = value.match(/src="([^"]+)"/);
+      if (match && match[1]) {
+        value = match[1];
+      }
+    }
+    
+    setForm({ ...form, [e.target.name]: value });
   };
 
   const handleFotoChange = (e) => {
@@ -310,19 +320,25 @@ export default function UmkmForm({ initialData = null, onSubmit }) {
       </div>
 
       {/* Google Maps */}
-      <div>
-        <label className="block text-sm font-semibold text-text-primary mb-2">Google Maps Embed URL</label>
-        <input
-          name="gmaps_embed"
-          value={form.gmaps_embed}
-          onChange={handleChange}
-          placeholder="https://www.google.com/maps/embed?pb=..."
-          className="w-full px-4 py-3 bg-white border border-border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all"
-        />
-      </div>
+      <div className="space-y-6">
+        <div>
+          <label className="block text-sm font-semibold text-text-primary mb-2">
+            Google Maps Embed URL <span className="text-text-muted font-normal">(Opsional untuk peta presisi)</span>
+          </label>
+          <input
+            name="gmaps_embed"
+            value={form.gmaps_embed || ""}
+            onChange={handleChange}
+            placeholder="Kutipan dari Google Maps > Share > Embed a map (src='https://www.google.com/maps/embed?pb=...')"
+            className="w-full px-4 py-3 bg-white border border-border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all"
+          />
+          <p className="text-xs text-text-muted mt-1.5">
+            Jika diisi, peta akan muncul langsung di halaman UMKM sesuai titik. Jika kosong, peta embed akan menggunakan perkiraan lokasi atau disembunyikan.
+          </p>
+        </div>
 
-      <div>
-        <label className="block text-sm font-semibold text-text-primary mb-2">Google Maps Link</label>
+        <div>
+          <label className="block text-sm font-semibold text-text-primary mb-2">Google Maps Link</label>
         <input
           name="gmaps_link"
           value={form.gmaps_link}
@@ -331,7 +347,7 @@ export default function UmkmForm({ initialData = null, onSubmit }) {
           className="w-full px-4 py-3 bg-white border border-border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all"
         />
       </div>
-
+      </div>
       {/* Submit */}
       <div className="pt-4">
         <button
