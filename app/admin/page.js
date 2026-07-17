@@ -65,13 +65,13 @@ export default function AdminDashboard() {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-        <div className="bg-white rounded-2xl border border-border p-5 shadow-sm">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-8">
+        <div className="bg-white rounded-2xl border border-border p-4 shadow-sm">
           <p className="text-3xl font-extrabold text-primary">{umkmList.length}</p>
           <p className="text-xs text-text-muted mt-1">Total UMKM</p>
         </div>
-        {categories.slice(0, 3).map((cat) => (
-          <div key={cat} className="bg-white rounded-2xl border border-border p-5 shadow-sm">
+        {categories.map((cat) => (
+          <div key={cat} className="bg-white rounded-2xl border border-border p-4 shadow-sm">
             <p className="text-3xl font-extrabold text-accent">
               {umkmList.filter((u) => u.kategori.toLowerCase().includes(cat.toLowerCase())).length}
             </p>

@@ -1,8 +1,26 @@
 "use client";
 
-import { useState, useCallback } from 'react';
-import Cropper from 'react-easy-crop';
+import { useState, useCallback, useRef } from 'react';
+import ReactCrop, { centerCrop, makeAspectCrop } from 'react-image-crop';
+import 'react-image-crop/dist/ReactCrop.css';
 import getCroppedImg from '@/lib/cropImage';
+
+// Helper to center crop initially
+function centerAspectCrop(mediaWidth, mediaHeight, aspect) {
+  return centerCrop(
+    makeAspectCrop(
+      {
+        unit: '%',
+        width: 90,
+      },
+      aspect,
+      mediaWidth,
+      mediaHeight,
+    ),
+    mediaWidth,
+    mediaHeight,
+  )
+}
 
 export default function ImageCropper({ 
   imageSrc, 
@@ -10,24 +28,53 @@ export default function ImageCropper({
   onCancel,
   aspectRatio = 16 / 9 
 }) {
-  const [crop, setCrop] = useState({ x: 0, y: 0 });
-  const [zoom, setZoom] = useState(1);
-  const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
+  const [crop, setCrop] = useState();
+  const [completedCrop, setCompletedCrop] = useState(null);
+  const [aspect, setAspect] = useState(aspectRatio);
   const [isProcessing, setIsProcessing] = useState(false);
+  const imgRef = useRef(null);
 
-  const handleCropComplete = useCallback((croppedArea, croppedAreaPixels) => {
-    setCroppedAreaPixels(croppedAreaPixels);
-  }, []);
+  const onImageLoad = useCallback((e) => {
+    const { width, height } = e.currentTarget;
+    if (aspect) {
+      setCrop(centerAspectCrop(width, height, aspect));
+    } else {
+      // Free aspect, just set a 90% square
+      setCrop({
+        unit: '%',
+        width: 90,
+        height: 90,
+        x: 5,
+        y: 5
+      });
+    }
+  }, [aspect]);
 
   const handleSave = async () => {
-    if (!croppedAreaPixels) return;
+    if (!completedCrop || !imgRef.current) return;
     
+    // Check if the crop has width and height, else we can't crop
+    if (completedCrop.width === 0 || completedCrop.height === 0) return;
+
     try {
       setIsProcessing(true);
+      
+      // react-image-crop provides crop values based on the *displayed* image size.
+      // We need to scale these to the *original* image resolution for the canvas.
+      const scaleX = imgRef.current.naturalWidth / imgRef.current.width;
+      const scaleY = imgRef.current.naturalHeight / imgRef.current.height;
+
+      const pixelCrop = {
+        x: completedCrop.x * scaleX,
+        y: completedCrop.y * scaleY,
+        width: completedCrop.width * scaleX,
+        height: completedCrop.height * scaleY,
+      };
+
       const croppedImageFile = await getCroppedImg(
         imageSrc,
-        croppedAreaPixels,
-        0 // rotation
+        pixelCrop,
+        0
       );
       
       onCropComplete(croppedImageFile);
@@ -40,12 +87,12 @@ export default function ImageCropper({
   };
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-sm p-0 sm:p-6 animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 backdrop-blur-md p-0 sm:p-6 animate-in fade-in duration-200">
       
-      <div className="flex flex-col w-full h-full sm:h-auto sm:max-h-[90vh] sm:max-w-2xl bg-gray-900 sm:rounded-3xl overflow-hidden shadow-2xl ring-1 ring-white/10">
+      <div className="flex flex-col w-full h-full sm:h-auto sm:max-h-[95vh] sm:max-w-4xl bg-gray-900 sm:rounded-3xl overflow-hidden shadow-2xl ring-1 ring-white/10">
         {/* Header */}
         <div className="flex items-center justify-between p-4 sm:px-6 bg-gray-900 text-white border-b border-gray-800 shrink-0">
-          <h3 className="text-lg font-semibold tracking-tight">Sesuaikan Gambar</h3>
+          <h3 className="text-lg font-semibold tracking-tight">Potong & Sesuaikan Gambar</h3>
           <button 
             onClick={onCancel}
             className="p-2 text-gray-400 hover:text-white hover:bg-gray-800 rounded-full transition-colors"
@@ -57,37 +104,53 @@ export default function ImageCropper({
         </div>
 
         {/* Cropper Area */}
-        <div className="relative flex-1 sm:h-[50vh] w-full bg-black min-h-[50vh]">
-          <Cropper
-            image={imageSrc}
+        <div className="relative flex-1 sm:h-[60vh] w-full bg-black min-h-[50vh] flex items-center justify-center overflow-auto p-4">
+          <ReactCrop
             crop={crop}
-            zoom={zoom}
-            aspect={aspectRatio}
-            onCropChange={setCrop}
-            onCropComplete={handleCropComplete}
-            onZoomChange={setZoom}
-            classes={{
-              containerClassName: "absolute inset-0",
-            }}
-          />
+            onChange={(_, percentCrop) => setCrop(percentCrop)}
+            onComplete={(c) => setCompletedCrop(c)}
+            aspect={aspect}
+            className="max-h-full max-w-full"
+          >
+            <img
+              ref={imgRef}
+              src={imageSrc}
+              alt="Crop area"
+              onLoad={onImageLoad}
+              className="max-h-[60vh] max-w-full object-contain"
+            />
+          </ReactCrop>
         </div>
 
         {/* Controls Area */}
-        <div className="p-4 sm:p-6 bg-gray-900 border-t border-gray-800 space-y-6 shrink-0">
-          <div className="flex items-center gap-4 text-white max-w-md mx-auto">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-gray-400 shrink-0">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607zM10.5 7.5v6m3-3h-6" />
-            </svg>
-            <input
-              type="range"
-              value={zoom}
-              min={1}
-              max={3}
-              step={0.1}
-              aria-labelledby="Zoom"
-              onChange={(e) => setZoom(e.target.value)}
-              className="w-full h-1.5 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-primary hover:accent-primary-light transition-all"
-            />
+        <div className="p-4 sm:p-6 bg-gray-900 border-t border-gray-800 space-y-4 shrink-0">
+          
+          <div className="flex flex-wrap items-center justify-center gap-2 mb-4">
+            <span className="text-xs text-gray-400 font-medium mr-2">Bentuk Potongan:</span>
+            <button 
+              onClick={() => { setAspect(16/9); if(imgRef.current) setCrop(centerAspectCrop(imgRef.current.width, imgRef.current.height, 16/9)); }}
+              className={`px-3 py-1.5 text-xs font-medium rounded-lg border transition-colors ${aspect === 16/9 ? 'bg-primary border-primary text-white' : 'bg-gray-800 border-gray-700 text-gray-300 hover:border-gray-500'}`}
+            >
+              Lanskap (16:9)
+            </button>
+            <button 
+              onClick={() => { setAspect(4/3); if(imgRef.current) setCrop(centerAspectCrop(imgRef.current.width, imgRef.current.height, 4/3)); }}
+              className={`px-3 py-1.5 text-xs font-medium rounded-lg border transition-colors ${aspect === 4/3 ? 'bg-primary border-primary text-white' : 'bg-gray-800 border-gray-700 text-gray-300 hover:border-gray-500'}`}
+            >
+              Standar (4:3)
+            </button>
+            <button 
+              onClick={() => { setAspect(1/1); if(imgRef.current) setCrop(centerAspectCrop(imgRef.current.width, imgRef.current.height, 1/1)); }}
+              className={`px-3 py-1.5 text-xs font-medium rounded-lg border transition-colors ${aspect === 1/1 ? 'bg-primary border-primary text-white' : 'bg-gray-800 border-gray-700 text-gray-300 hover:border-gray-500'}`}
+            >
+              Kotak (1:1)
+            </button>
+            <button 
+              onClick={() => setAspect(undefined)}
+              className={`px-3 py-1.5 text-xs font-medium rounded-lg border transition-colors ${!aspect ? 'bg-primary border-primary text-white' : 'bg-gray-800 border-gray-700 text-gray-300 hover:border-gray-500'}`}
+            >
+              Bebas (Custom)
+            </button>
           </div>
           
           <div className="flex gap-3 sm:gap-4 max-w-md mx-auto">
@@ -100,7 +163,7 @@ export default function ImageCropper({
             </button>
             <button
               onClick={handleSave}
-              disabled={isProcessing}
+              disabled={isProcessing || !completedCrop?.width || !completedCrop?.height}
               className="flex-1 px-4 py-3 bg-primary text-white rounded-xl font-semibold hover:bg-primary-dark disabled:opacity-50 transition-colors flex justify-center items-center gap-2 shadow-lg shadow-primary/20"
             >
               {isProcessing ? (
