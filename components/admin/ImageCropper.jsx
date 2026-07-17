@@ -110,14 +110,15 @@ export default function ImageCropper({
             onChange={(_, percentCrop) => setCrop(percentCrop)}
             onComplete={(c) => setCompletedCrop(c)}
             aspect={aspect}
-            className="max-h-full max-w-full"
+            className="flex items-center justify-center max-w-full"
           >
             <img
               ref={imgRef}
               src={imageSrc}
               alt="Crop area"
               onLoad={onImageLoad}
-              className="max-h-[60vh] max-w-full object-contain"
+              className="max-w-full w-auto h-auto block"
+              style={{ maxHeight: 'min(60vh, 500px)' }}
             />
           </ReactCrop>
         </div>
