@@ -25,12 +25,11 @@ function centerAspectCrop(mediaWidth, mediaHeight, aspect) {
 export default function ImageCropper({ 
   imageSrc, 
   onCropComplete, 
-  onCancel,
-  aspectRatio = 16 / 9 
+  onCancel
 }) {
   const [crop, setCrop] = useState();
   const [completedCrop, setCompletedCrop] = useState(null);
-  const [aspect, setAspect] = useState(aspectRatio);
+  const [aspect, setAspect] = useState(undefined); // Default ke Bebas (Custom)
   const [isProcessing, setIsProcessing] = useState(false);
   const imgRef = useRef(null);
 
@@ -39,13 +38,13 @@ export default function ImageCropper({
     if (aspect) {
       setCrop(centerAspectCrop(width, height, aspect));
     } else {
-      // Free aspect, just set a 90% square
+      // Free aspect, cover 100% of the image initially
       setCrop({
         unit: '%',
-        width: 90,
-        height: 90,
-        x: 5,
-        y: 5
+        width: 100,
+        height: 100,
+        x: 0,
+        y: 0
       });
     }
   }, [aspect]);
@@ -94,6 +93,7 @@ export default function ImageCropper({
         <div className="flex items-center justify-between p-4 sm:px-6 bg-gray-900 text-white border-b border-gray-800 shrink-0">
           <h3 className="text-lg font-semibold tracking-tight">Potong & Sesuaikan Gambar</h3>
           <button 
+            type="button"
             onClick={onCancel}
             className="p-2 text-gray-400 hover:text-white hover:bg-gray-800 rounded-full transition-colors"
           >
@@ -128,24 +128,28 @@ export default function ImageCropper({
           <div className="flex flex-wrap items-center justify-center gap-2 mb-4">
             <span className="text-xs text-gray-400 font-medium mr-2">Bentuk Potongan:</span>
             <button 
+              type="button"
               onClick={() => { setAspect(16/9); if(imgRef.current) setCrop(centerAspectCrop(imgRef.current.width, imgRef.current.height, 16/9)); }}
               className={`px-3 py-1.5 text-xs font-medium rounded-lg border transition-colors ${aspect === 16/9 ? 'bg-primary border-primary text-white' : 'bg-gray-800 border-gray-700 text-gray-300 hover:border-gray-500'}`}
             >
               Lanskap (16:9)
             </button>
             <button 
+              type="button"
               onClick={() => { setAspect(4/3); if(imgRef.current) setCrop(centerAspectCrop(imgRef.current.width, imgRef.current.height, 4/3)); }}
               className={`px-3 py-1.5 text-xs font-medium rounded-lg border transition-colors ${aspect === 4/3 ? 'bg-primary border-primary text-white' : 'bg-gray-800 border-gray-700 text-gray-300 hover:border-gray-500'}`}
             >
               Standar (4:3)
             </button>
             <button 
+              type="button"
               onClick={() => { setAspect(1/1); if(imgRef.current) setCrop(centerAspectCrop(imgRef.current.width, imgRef.current.height, 1/1)); }}
               className={`px-3 py-1.5 text-xs font-medium rounded-lg border transition-colors ${aspect === 1/1 ? 'bg-primary border-primary text-white' : 'bg-gray-800 border-gray-700 text-gray-300 hover:border-gray-500'}`}
             >
               Kotak (1:1)
             </button>
             <button 
+              type="button"
               onClick={() => setAspect(undefined)}
               className={`px-3 py-1.5 text-xs font-medium rounded-lg border transition-colors ${!aspect ? 'bg-primary border-primary text-white' : 'bg-gray-800 border-gray-700 text-gray-300 hover:border-gray-500'}`}
             >
@@ -155,6 +159,7 @@ export default function ImageCropper({
           
           <div className="flex gap-3 sm:gap-4 max-w-md mx-auto">
             <button
+              type="button"
               onClick={onCancel}
               disabled={isProcessing}
               className="flex-1 px-4 py-3 bg-gray-800/80 text-white rounded-xl font-medium hover:bg-gray-700 disabled:opacity-50 transition-colors border border-gray-700"
@@ -162,6 +167,7 @@ export default function ImageCropper({
               Batal
             </button>
             <button
+              type="button"
               onClick={handleSave}
               disabled={isProcessing || !completedCrop?.width || !completedCrop?.height}
               className="flex-1 px-4 py-3 bg-primary text-white rounded-xl font-semibold hover:bg-primary-dark disabled:opacity-50 transition-colors flex justify-center items-center gap-2 shadow-lg shadow-primary/20"
