@@ -30,14 +30,14 @@ export default function ImageCarousel({ images, altText }) {
 
       {/* Main Image */}
       <div className="relative group">
-        <div className="relative w-full aspect-[4/3] rounded-xl overflow-hidden bg-surface">
+        <div className="relative w-full aspect-[4/3] rounded-xl overflow-hidden bg-gray-50 flex items-center justify-center">
           <Image
             src={images[currentIndex]}
             alt={`${altText} - Foto ${currentIndex + 1}`}
             fill
             priority={currentIndex === 0}
             sizes="(max-width: 768px) 100vw, 60vw"
-            className="object-cover transition-opacity duration-300"
+            className="object-contain transition-opacity duration-300"
           />
         </div>
 
