@@ -33,7 +33,7 @@ export default function UmkmForm({ initialData = null, onSubmit }) {
   const [currentCrop, setCurrentCrop] = useState(null); 
   const [cropQueue, setCropQueue] = useState([]);
 
-  const CATEGORIES = ["Kuliner", "Kerajinan", "Jasa", "Pertanian", "Kerajinan & Jasa"];
+  const CATEGORIES = ["Kuliner", "Kerajinan", "Jasa", "Pertanian", "Peternakan", "Kerajinan & Jasa"];
 
   const handleChange = (e) => {
     let value = e.target.value;

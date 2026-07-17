@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import umkmData from "@/data/umkm.json";
 
-const CATEGORIES = ["Semua", "Kuliner", "Kerajinan", "Jasa", "Pertanian"];
+const CATEGORIES = ["Semua", "Kuliner", "Kerajinan", "Jasa", "Pertanian", "Peternakan"];
 
 export default function BottomNav() {
   const [searchOpen, setSearchOpen] = useState(false);

@@ -16,6 +16,7 @@
   --color-kerajinan: #3b82f6;
   --color-jasa: #8b5cf6;
   --color-pertanian: #16a34a;
+  --color-peternakan: #b45309;
   --font-sans: "Plus Jakarta Sans", "Inter", system-ui, sans-serif;
   --font-heading: "Plus Jakarta Sans", system-ui, sans-serif;
 }
@@ -119,6 +120,7 @@ body {
 .badge-kerajinan { background-color: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe; }
 .badge-jasa { background-color: #f5f3ff; color: #7c3aed; border: 1px solid #ddd6fe; }
 .badge-pertanian { background-color: #f0fdf4; color: #16a34a; border: 1px solid #bbf7d0; }
+.badge-peternakan { background-color: #fffbeb; color: #b45309; border: 1px solid #fde68a; }
 
 /* WhatsApp gradient */
 .wa-gradient {

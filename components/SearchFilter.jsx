@@ -3,7 +3,7 @@
 import { useState, useMemo, useEffect } from "react";
 import UmkmCard from "./UmkmCard";
 
-const CATEGORIES = ["Semua", "Kuliner", "Kerajinan", "Jasa", "Pertanian"];
+const CATEGORIES = ["Semua", "Kuliner", "Kerajinan", "Jasa", "Pertanian", "Peternakan"];
 
 export default function SearchFilter({ data }) {
   const [searchQuery, setSearchQuery] = useState("");

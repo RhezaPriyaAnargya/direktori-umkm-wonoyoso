@@ -5,6 +5,7 @@ const CATEGORY_CONFIG = [
   { name: "Kerajinan", icon: "🎨", color: "#3b82f6", bgColor: "#eff6ff" },
   { name: "Jasa", icon: "🔧", color: "#8b5cf6", bgColor: "#f5f3ff" },
   { name: "Pertanian", icon: "🌿", color: "#16a34a", bgColor: "#f0fdf4" },
+  { name: "Peternakan", icon: "🐄", color: "#b45309", bgColor: "#fffbeb" },
 ];
 
 export default function KategoriUmkm({ umkmData = [] }) {
