@@ -12,7 +12,7 @@ export default function CaraPakaiPage() {
         {/* Video Container - Classic Responsive Hack */}
         <div style={{ position: "relative", paddingBottom: "56.25%", height: 0, overflow: "hidden" }} className="bg-black">
           <iframe 
-            src="https://www.youtube.com/embed/dQw4w9WgXcQ?controls=1&rel=0&modestbranding=0" 
+            src="https://www.youtube.com/embed/Zx2H50Ra2jE?controls=1&rel=0&modestbranding=0" 
             title="Panduan Penggunaan Website UMKM Wonoyoso" 
             style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", border: 0 }}
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
@@ -30,7 +30,7 @@ export default function CaraPakaiPage() {
             Video error atau tidak bisa diputar?
           </p>
           <a 
-            href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" 
+            href="https://www.youtube.com/watch?v=Zx2H50Ra2jE" 
             target="_blank" 
             rel="noopener noreferrer"
             className="inline-flex items-center gap-1.5 text-sm font-semibold text-red-600 hover:text-red-700 transition-colors bg-red-50 hover:bg-red-100 px-3 py-1.5 rounded-lg"
