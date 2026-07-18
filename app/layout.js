@@ -31,6 +31,8 @@ export const metadata = {
   },
 };
 
+import { Analytics } from "@vercel/analytics/react";
+
 export default function RootLayout({ children }) {
   return (
     <html lang="id" className="h-full" suppressHydrationWarning data-scroll-behavior="smooth">
@@ -44,6 +46,7 @@ export default function RootLayout({ children }) {
       </head>
       <body className="min-h-full flex flex-col antialiased pb-20 md:pb-0" suppressHydrationWarning>
         {children}
+        <Analytics />
       </body>
     </html>
   );
