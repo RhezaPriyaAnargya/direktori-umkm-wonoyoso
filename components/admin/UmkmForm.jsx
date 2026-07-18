@@ -29,6 +29,8 @@ export default function UmkmForm({ initialData = null, onSubmit }) {
   const fotoRef = useRef(null);
   const galeriRef = useRef(null);
 
+  const [processingHeic, setProcessingHeic] = useState(false);
+
   // State untuk antrean crop
   const [currentCrop, setCurrentCrop] = useState(null); 
   const [cropQueue, setCropQueue] = useState([]);
@@ -49,24 +51,44 @@ export default function UmkmForm({ initialData = null, onSubmit }) {
     setForm({ ...form, [e.target.name]: value });
   };
 
-  const handleFotoChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      if (!file.type.startsWith("image/")) {
-        setError("File Foto Utama harus berupa gambar (JPEG, PNG, WebP, dll).");
+  const handleFotoChange = async (e) => {
+    const rawFile = e.target.files[0];
+    if (rawFile) {
+      const isImage = rawFile.type.startsWith("image/") || rawFile.name.toLowerCase().endsWith(".heic") || rawFile.name.toLowerCase().endsWith(".heif");
+      if (!isImage) {
+        setError("File Foto Utama harus berupa gambar (JPEG, PNG, WebP, HEIC, dll).");
         return;
       }
       setError("");
-      // Jangan langsung simpan, masukkan ke state crop dulu
-      setCurrentCrop({ type: 'foto', url: URL.createObjectURL(file), originalFile: file });
-      // Reset input agar bisa memilih file yang sama lagi jika batal
-      e.target.value = "";
+      setProcessingHeic(true);
+      
+      try {
+        let file = rawFile;
+        const isHeic = file.name.toLowerCase().endsWith(".heic") || file.name.toLowerCase().endsWith(".heif") || file.type === "image/heic" || file.type === "image/heif";
+        
+        if (isHeic) {
+          const heic2any = (await import("heic2any")).default;
+          const convertedBlob = await heic2any({ blob: file, toType: "image/jpeg", quality: 0.8 });
+          const blob = Array.isArray(convertedBlob) ? convertedBlob[0] : convertedBlob;
+          file = new File([blob], file.name.replace(/\.[^/.]+$/, "") + ".jpeg", { type: "image/jpeg" });
+        }
+
+        // Jangan langsung simpan, masukkan ke state crop dulu
+        setCurrentCrop({ type: 'foto', url: URL.createObjectURL(file), originalFile: file });
+      } catch (err) {
+        console.error("HEIC processing error:", err);
+        setError("Gagal memproses gambar. Pastikan file valid.");
+      } finally {
+        setProcessingHeic(false);
+        // Reset input agar bisa memilih file yang sama lagi jika batal
+        e.target.value = "";
+      }
     }
   };
 
-  const handleGaleriChange = (e) => {
+  const handleGaleriChange = async (e) => {
     const files = Array.from(e.target.files);
-    const validFiles = files.filter((f) => f.type.startsWith("image/"));
+    const validFiles = files.filter(f => f.type.startsWith("image/") || f.name.toLowerCase().endsWith(".heic") || f.name.toLowerCase().endsWith(".heif"));
     
     if (validFiles.length !== files.length) {
       setError("Beberapa file ditolak karena bukan format gambar.");
@@ -75,17 +97,40 @@ export default function UmkmForm({ initialData = null, onSubmit }) {
     }
 
     if (validFiles.length > 0) {
-      const newQueue = validFiles.map(f => ({ type: 'galeri', url: URL.createObjectURL(f), originalFile: f }));
-      
-      if (!currentCrop) {
-        setCurrentCrop(newQueue[0]);
-        setCropQueue(prev => [...prev, ...newQueue.slice(1)]);
-      } else {
-        setCropQueue(prev => [...prev, ...newQueue]);
+      setProcessingHeic(true);
+      try {
+        const processedFiles = [];
+        for (let rawFile of validFiles) {
+          let file = rawFile;
+          const isHeic = file.name.toLowerCase().endsWith(".heic") || file.name.toLowerCase().endsWith(".heif") || file.type === "image/heic" || file.type === "image/heif";
+          
+          if (isHeic) {
+            const heic2any = (await import("heic2any")).default;
+            const convertedBlob = await heic2any({ blob: file, toType: "image/jpeg", quality: 0.8 });
+            const blob = Array.isArray(convertedBlob) ? convertedBlob[0] : convertedBlob;
+            file = new File([blob], file.name.replace(/\.[^/.]+$/, "") + ".jpeg", { type: "image/jpeg" });
+          }
+          processedFiles.push(file);
+        }
+
+        const newQueue = processedFiles.map(f => ({ type: 'galeri', url: URL.createObjectURL(f), originalFile: f }));
+        
+        if (!currentCrop) {
+          setCurrentCrop(newQueue[0]);
+          setCropQueue(prev => [...prev, ...newQueue.slice(1)]);
+        } else {
+          setCropQueue(prev => [...prev, ...newQueue]);
+        }
+      } catch (err) {
+        console.error("HEIC processing error:", err);
+        setError("Gagal memproses beberapa gambar. Pastikan file valid.");
+      } finally {
+        setProcessingHeic(false);
+        e.target.value = "";
       }
+    } else {
+      e.target.value = "";
     }
-    // Reset input
-    e.target.value = "";
   };
 
   const handleCropComplete = (croppedFile) => {
@@ -202,6 +247,19 @@ export default function UmkmForm({ initialData = null, onSubmit }) {
           onCancel={handleCropCancel}
         />
       )}
+
+      {/* Overlay Loading HEIC */}
+      {processingHeic && (
+        <div className="fixed inset-0 z-[110] flex items-center justify-center bg-black/60 backdrop-blur-sm">
+          <div className="bg-white p-6 rounded-2xl flex flex-col items-center shadow-xl">
+            <svg className="animate-spin w-8 h-8 text-primary mb-3" viewBox="0 0 24 24">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+            </svg>
+            <p className="text-sm font-medium text-gray-700">Memproses gambar...</p>
+          </div>
+        </div>
+      )}
       {error && (
         <div className="bg-red-50 border border-red-200 text-red-700 text-sm px-4 py-3 rounded-xl">
           {error}
@@ -254,8 +312,8 @@ export default function UmkmForm({ initialData = null, onSubmit }) {
       {/* Foto Utama */}
       <div>
         <label className="block text-sm font-semibold text-text-primary mb-1">Foto Utama {!initialData && <span className="text-red-500">*</span>}</label>
-        <p className="text-xs text-text-muted mb-3">Format yang didukung: JPG, PNG, WebP (Maks. 5MB). Kamu bisa langsung mengambil dari kamera.</p>
-        <input ref={fotoRef} type="file" accept="image/jpeg, image/png, image/webp" onChange={handleFotoChange} className="hidden" />
+        <p className="text-xs text-text-muted mb-3">Format yang didukung: JPG, PNG, WebP, HEIC (Maks. 5MB). Kamu bisa langsung mengambil dari kamera.</p>
+        <input ref={fotoRef} type="file" accept="image/jpeg, image/png, image/webp, .heic, .heif" onChange={handleFotoChange} className="hidden" />
         <div className="flex items-start gap-4">
           {fotoPreview && (
             <div className="w-32 h-32 rounded-xl overflow-hidden bg-gray-100 relative flex-shrink-0">
@@ -276,7 +334,7 @@ export default function UmkmForm({ initialData = null, onSubmit }) {
       <div>
         <label className="block text-sm font-semibold text-text-primary mb-1">Galeri Foto</label>
         <p className="text-xs text-text-muted mb-3">Pilih beberapa foto sekaligus untuk menampilkan produk/suasana tempat.</p>
-        <input ref={galeriRef} type="file" accept="image/jpeg, image/png, image/webp" multiple onChange={handleGaleriChange} className="hidden" />
+        <input ref={galeriRef} type="file" accept="image/jpeg, image/png, image/webp, .heic, .heif" multiple onChange={handleGaleriChange} className="hidden" />
         <div className="flex flex-wrap gap-3 mb-3">
           {galeriPreviews.map((url, i) => (
             <div key={i} className="relative w-24 h-24 rounded-lg overflow-hidden bg-gray-100 group">

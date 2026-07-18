@@ -3,6 +3,7 @@
 import { useState, useRef } from "react";
 import Image from "next/image";
 import { supabase } from "@/lib/supabase";
+import { processImageToWebp } from "@/lib/imageUtils";
 
 export default function BeritaForm({ initialData = null, umkmList = [], onSubmit }) {
   const [form, setForm] = useState({
@@ -15,22 +16,35 @@ export default function BeritaForm({ initialData = null, umkmList = [], onSubmit
   const [gambarPreview, setGambarPreview] = useState(initialData?.gambar || "");
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
+  const [processingHeic, setProcessingHeic] = useState(false);
   const gambarRef = useRef(null);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleGambarChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      if (!file.type.startsWith("image/")) {
-        setError("File harus berupa gambar (JPEG, PNG, WebP, dll).");
+  const handleGambarChange = async (e) => {
+    const rawFile = e.target.files[0];
+    if (rawFile) {
+      const isImage = rawFile.type.startsWith("image/") || rawFile.name.toLowerCase().endsWith(".heic") || rawFile.name.toLowerCase().endsWith(".heif");
+      if (!isImage) {
+        setError("File harus berupa gambar (JPEG, PNG, WebP, HEIC, dll).");
         return;
       }
       setError("");
-      setGambarFile(file);
-      setGambarPreview(URL.createObjectURL(file));
+      setProcessingHeic(true);
+      
+      try {
+        const webpFile = await processImageToWebp(rawFile);
+        setGambarFile(webpFile);
+        setGambarPreview(URL.createObjectURL(webpFile));
+      } catch (err) {
+        console.error("Image processing error:", err);
+        setError("Gagal memproses gambar. Pastikan file valid.");
+      } finally {
+        setProcessingHeic(false);
+        e.target.value = "";
+      }
     }
   };
 
@@ -89,6 +103,19 @@ export default function BeritaForm({ initialData = null, umkmList = [], onSubmit
         </div>
       )}
 
+      {/* Overlay Loading HEIC */}
+      {processingHeic && (
+        <div className="fixed inset-0 z-[110] flex items-center justify-center bg-black/60 backdrop-blur-sm">
+          <div className="bg-white p-6 rounded-2xl flex flex-col items-center shadow-xl">
+            <svg className="animate-spin w-8 h-8 text-primary mb-3" viewBox="0 0 24 24">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+            </svg>
+            <p className="text-sm font-medium text-gray-700">Memproses gambar...</p>
+          </div>
+        </div>
+      )}
+
       {/* Judul */}
       <div>
         <label className="block text-sm font-semibold text-text-primary mb-2">Judul Berita *</label>
@@ -105,7 +132,8 @@ export default function BeritaForm({ initialData = null, umkmList = [], onSubmit
       {/* Gambar */}
       <div>
         <label className="block text-sm font-semibold text-text-primary mb-2">Gambar Berita</label>
-        <input ref={gambarRef} type="file" accept="image/*" onChange={handleGambarChange} className="hidden" />
+        <p className="text-xs text-text-muted mb-3">Format yang didukung: JPG, PNG, WebP, HEIC (Otomatis dikonversi ke WebP).</p>
+        <input ref={gambarRef} type="file" accept="image/jpeg, image/png, image/webp, .heic, .heif" onChange={handleGambarChange} className="hidden" />
         <div className="flex items-start gap-4">
           {gambarPreview && (
             <div className="w-40 h-24 rounded-xl overflow-hidden bg-gray-100 relative flex-shrink-0">
