@@ -46,6 +46,9 @@ export default function UmkmForm({ initialData = null, onSubmit }) {
   // State untuk Touch Drag and Drop (mobile)
   const [touchDragIndex, setTouchDragIndex] = useState(null);
   const [touchOverIndex, setTouchOverIndex] = useState(null);
+  // State untuk tap-to-swap (mobile)
+  const [selectedForSwap, setSelectedForSwap] = useState(null);
+  
   const touchStartPos = useRef(null);
   const galeriContainerRef = useRef(null);
   const itemRefs = useRef([]);
@@ -280,6 +283,25 @@ export default function UmkmForm({ initialData = null, onSubmit }) {
     touchStartPos.current = null;
   }, [touchDragIndex, touchOverIndex]);
 
+  // ===== Tap to Swap (Mobile Alternative) =====
+  const handleItemClick = (index) => {
+    if (selectedForSwap === null) {
+      setSelectedForSwap(index);
+    } else if (selectedForSwap === index) {
+      setSelectedForSwap(null); // Deselect
+    } else {
+      // Swap
+      setGaleriItems((prev) => {
+        const newItems = [...prev];
+        const temp = newItems[selectedForSwap];
+        newItems[selectedForSwap] = newItems[index];
+        newItems[index] = temp;
+        return newItems;
+      });
+      setSelectedForSwap(null);
+    }
+  };
+
   const uploadFile = async (file, path) => {
     if (!file.type.startsWith("image/")) {
       throw new Error(`File ${file.name} bukan format gambar yang valid.`);
@@ -448,28 +470,36 @@ export default function UmkmForm({ initialData = null, onSubmit }) {
           {galeriItems.map((item, i) => {
             const isDragging = touchDragIndex === i || draggedIndex === i;
             const isDropTarget = touchDragIndex !== null && touchOverIndex === i && touchDragIndex !== i;
+            const isSelectedForSwap = selectedForSwap === i;
             
             return (
               <div 
                 key={item.id} 
                 draggable
+                onClick={() => handleItemClick(i)}
                 onDragStart={(e) => handleDragStart(e, i)}
                 onDragOver={(e) => handleDragOver(e, i)}
                 onDrop={(e) => handleDrop(e, i)}
                 onTouchStart={(e) => handleTouchStart(e, i)}
                 onTouchMove={(e) => handleTouchMove(e, i)}
                 onTouchEnd={handleTouchEnd}
-                className={`relative w-24 h-24 rounded-lg overflow-visible bg-gray-100 group cursor-grab active:cursor-grabbing transition-all duration-150 select-none ${isDragging ? 'opacity-50 scale-95' : 'opacity-100'} ${isDropTarget ? 'ring-2 ring-primary ring-offset-2' : ''}`}
+                className={`relative w-24 h-24 rounded-lg overflow-visible bg-gray-100 group cursor-grab active:cursor-grabbing transition-all duration-150 select-none touch-none ${isDragging ? 'opacity-50 scale-95' : 'opacity-100'} ${isDropTarget ? 'ring-2 ring-primary ring-offset-2' : ''} ${isSelectedForSwap ? 'ring-4 ring-accent ring-offset-2 scale-105 z-10' : ''}`}
               >
                 <div className="relative w-full h-full rounded-lg overflow-hidden">
                   <Image src={item.url} alt={`Galeri ${i + 1}`} fill sizes="96px" className="object-cover pointer-events-none" />
                 </div>
                 
                 {/* Drag Handle Overlay */}
-                <div className={`absolute inset-0 rounded-lg transition-colors flex items-center justify-center ${isDragging ? 'bg-primary/20' : 'bg-black/0 group-hover:bg-black/10'}`}>
-                  <svg className={`w-6 h-6 text-white drop-shadow-md transition-opacity pointer-events-none ${isDragging ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
-                  </svg>
+                <div className={`absolute inset-0 rounded-lg transition-colors flex items-center justify-center ${isDragging || isSelectedForSwap ? 'bg-primary/20' : 'bg-black/0 group-hover:bg-black/10'}`}>
+                  {isSelectedForSwap ? (
+                    <svg className="w-8 h-8 text-white drop-shadow-md" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clipRule="evenodd" />
+                    </svg>
+                  ) : (
+                    <svg className={`w-6 h-6 text-white drop-shadow-md transition-opacity pointer-events-none ${isDragging ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
+                    </svg>
+                  )}
                 </div>
 
                 {/* Order indicator */}
@@ -480,7 +510,7 @@ export default function UmkmForm({ initialData = null, onSubmit }) {
                 <button
                   type="button"
                   onClick={(e) => { e.stopPropagation(); removeGaleriItem(i); }}
-                  className="absolute -top-2 -right-2 w-7 h-7 bg-red-500 hover:bg-red-600 text-white rounded-full text-xs flex items-center justify-center shadow-lg opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity z-10 touch-manipulation"
+                  className="absolute -top-2 -right-2 w-7 h-7 bg-red-500 hover:bg-red-600 text-white rounded-full text-xs flex items-center justify-center shadow-lg opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity z-20 touch-manipulation"
                 >
                   ✕
                 </button>
