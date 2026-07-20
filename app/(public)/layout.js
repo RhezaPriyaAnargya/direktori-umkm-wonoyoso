@@ -6,7 +6,7 @@ export default function PublicLayout({ children }) {
   return (
     <>
       <Navbar />
-      <main className="flex-1">{children}</main>
+      <main className="flex-1" style={{ paddingBottom: 'calc(5rem + env(safe-area-inset-bottom, 0px))' }}>{children}</main>
       <Footer />
       <BottomNav />
     </>

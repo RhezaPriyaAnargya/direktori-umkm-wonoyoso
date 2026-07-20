@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useCallback } from "react";
 import Image from "next/image";
 import { supabase } from "@/lib/supabase";
 import ImageCropper from "./ImageCropper";
@@ -22,8 +22,13 @@ export default function UmkmForm({ initialData = null, onSubmit }) {
 
   const [fotoFile, setFotoFile] = useState(null);
   const [fotoPreview, setFotoPreview] = useState(initialData?.foto || "");
-  const [galeriFiles, setGaleriFiles] = useState([]);
-  const [galeriPreviews, setGaleriPreviews] = useState(initialData?.galeri || []);
+  const [galeriItems, setGaleriItems] = useState(() => {
+    return (initialData?.galeri || []).map((url) => ({
+      id: Math.random().toString(36).substring(7),
+      url,
+      file: null,
+    }));
+  });
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
   const fotoRef = useRef(null);
@@ -34,6 +39,16 @@ export default function UmkmForm({ initialData = null, onSubmit }) {
   // State untuk antrean crop
   const [currentCrop, setCurrentCrop] = useState(null); 
   const [cropQueue, setCropQueue] = useState([]);
+
+  // State untuk Drag and Drop (desktop)
+  const [draggedIndex, setDraggedIndex] = useState(null);
+
+  // State untuk Touch Drag and Drop (mobile)
+  const [touchDragIndex, setTouchDragIndex] = useState(null);
+  const [touchOverIndex, setTouchOverIndex] = useState(null);
+  const touchStartPos = useRef(null);
+  const galeriContainerRef = useRef(null);
+  const itemRefs = useRef([]);
 
   const CATEGORIES = ["Kuliner", "Kerajinan", "Jasa", "Pertanian", "Peternakan", "Kerajinan & Jasa"];
 
@@ -138,8 +153,14 @@ export default function UmkmForm({ initialData = null, onSubmit }) {
       setFotoFile(croppedFile);
       setFotoPreview(URL.createObjectURL(croppedFile));
     } else {
-      setGaleriFiles((prev) => [...prev, croppedFile]);
-      setGaleriPreviews((prev) => [...prev, URL.createObjectURL(croppedFile)]);
+      setGaleriItems((prev) => [
+        ...prev,
+        {
+          id: Math.random().toString(36).substring(7),
+          url: URL.createObjectURL(croppedFile),
+          file: croppedFile,
+        },
+      ]);
     }
     
     // Lanjut ke antrean berikutnya jika ada
@@ -162,14 +183,102 @@ export default function UmkmForm({ initialData = null, onSubmit }) {
   };
 
   const removeGaleriItem = (index) => {
-    setGaleriPreviews((prev) => prev.filter((_, i) => i !== index));
-    // Only remove from files if it's a new upload (not existing URL)
-    const existingCount = initialData?.galeri?.length || 0;
-    if (index >= existingCount) {
-      const fileIndex = index - existingCount;
-      setGaleriFiles((prev) => prev.filter((_, i) => i !== fileIndex));
-    }
+    setGaleriItems((prev) => prev.filter((_, i) => i !== index));
   };
+
+  const handleDragStart = (e, index) => {
+    setDraggedIndex(index);
+    // Needed for Firefox
+    e.dataTransfer.effectAllowed = "move";
+  };
+
+  const handleDragOver = (e, index) => {
+    e.preventDefault(); // Allow drop
+    e.dataTransfer.dropEffect = "move";
+  };
+
+  const handleDrop = (e, index) => {
+    e.preventDefault();
+    if (draggedIndex === null || draggedIndex === index) return;
+
+    const newItems = [...galeriItems];
+    const draggedItem = newItems[draggedIndex];
+    newItems.splice(draggedIndex, 1);
+    newItems.splice(index, 0, draggedItem);
+
+    setGaleriItems(newItems);
+    setDraggedIndex(null);
+  };
+
+  // ===== Touch Drag and Drop (Mobile) =====
+  const handleTouchStart = useCallback((e, index) => {
+    const touch = e.touches[0];
+    touchStartPos.current = { x: touch.clientX, y: touch.clientY };
+    // Use a timeout to differentiate tap from drag
+    const timer = setTimeout(() => {
+      setTouchDragIndex(index);
+    }, 200);
+    // Store timer so we can cancel it on quick taps
+    touchStartPos.current.timer = timer;
+  }, []);
+
+  const handleTouchMove = useCallback((e, index) => {
+    if (touchDragIndex === null && touchStartPos.current) {
+      const touch = e.touches[0];
+      const dx = Math.abs(touch.clientX - touchStartPos.current.x);
+      const dy = Math.abs(touch.clientY - touchStartPos.current.y);
+      // If moved enough, start dragging immediately
+      if (dx > 10 || dy > 10) {
+        clearTimeout(touchStartPos.current.timer);
+        setTouchDragIndex(index);
+        e.preventDefault();
+      }
+      return;
+    }
+    
+    if (touchDragIndex === null) return;
+    e.preventDefault(); // Prevent scrolling while dragging
+
+    const touch = e.touches[0];
+    const container = galeriContainerRef.current;
+    if (!container) return;
+
+    // Find which item the finger is over
+    const items = container.children;
+    let overIdx = null;
+    for (let i = 0; i < items.length; i++) {
+      const rect = items[i].getBoundingClientRect();
+      if (
+        touch.clientX >= rect.left &&
+        touch.clientX <= rect.right &&
+        touch.clientY >= rect.top &&
+        touch.clientY <= rect.bottom
+      ) {
+        overIdx = i;
+        break;
+      }
+    }
+    setTouchOverIndex(overIdx);
+  }, [touchDragIndex]);
+
+  const handleTouchEnd = useCallback(() => {
+    if (touchStartPos.current?.timer) {
+      clearTimeout(touchStartPos.current.timer);
+    }
+    
+    if (touchDragIndex !== null && touchOverIndex !== null && touchDragIndex !== touchOverIndex) {
+      setGaleriItems(prev => {
+        const newItems = [...prev];
+        const draggedItem = newItems[touchDragIndex];
+        newItems.splice(touchDragIndex, 1);
+        newItems.splice(touchOverIndex, 0, draggedItem);
+        return newItems;
+      });
+    }
+    setTouchDragIndex(null);
+    setTouchOverIndex(null);
+    touchStartPos.current = null;
+  }, [touchDragIndex, touchOverIndex]);
 
   const uploadFile = async (file, path) => {
     if (!file.type.startsWith("image/")) {
@@ -199,21 +308,21 @@ export default function UmkmForm({ initialData = null, onSubmit }) {
 
     try {
       let fotoUrl = fotoPreview;
-      let galeriUrls = [...galeriPreviews];
 
       // Upload main photo if new
       if (fotoFile) {
         fotoUrl = await uploadFile(fotoFile, "foto");
       }
 
-      // Upload new gallery images
-      if (galeriFiles.length > 0) {
-        const existingCount = initialData?.galeri?.length || 0;
-        const existingUrls = galeriUrls.slice(0, existingCount);
-        const newUploads = await Promise.all(
-          galeriFiles.map((f) => uploadFile(f, "galeri"))
-        );
-        galeriUrls = [...existingUrls, ...newUploads];
+      // Upload gallery items sequentially to preserve order
+      let galeriUrls = [];
+      for (const item of galeriItems) {
+        if (item.file) {
+          const url = await uploadFile(item.file, "galeri");
+          galeriUrls.push(url);
+        } else {
+          galeriUrls.push(item.url);
+        }
       }
 
       // Filter out blob URLs (only keep real URLs)
@@ -333,21 +442,51 @@ export default function UmkmForm({ initialData = null, onSubmit }) {
       {/* Galeri */}
       <div>
         <label className="block text-sm font-semibold text-text-primary mb-1">Galeri Foto</label>
-        <p className="text-xs text-text-muted mb-3">Pilih beberapa foto sekaligus untuk menampilkan produk/suasana tempat.</p>
+        <p className="text-xs text-text-muted mb-3">Pilih beberapa foto sekaligus untuk menampilkan produk/suasana tempat. Drag and drop untuk mengubah urutan.</p>
         <input ref={galeriRef} type="file" accept="image/jpeg, image/png, image/webp, .heic, .heif" multiple onChange={handleGaleriChange} className="hidden" />
-        <div className="flex flex-wrap gap-3 mb-3">
-          {galeriPreviews.map((url, i) => (
-            <div key={i} className="relative w-24 h-24 rounded-lg overflow-hidden bg-gray-100 group">
-              <Image src={url} alt={`Galeri ${i + 1}`} fill sizes="96px" className="object-cover" />
-              <button
-                type="button"
-                onClick={() => removeGaleriItem(i)}
-                className="absolute top-1 right-1 w-5 h-5 bg-red-500 text-white rounded-full text-xs flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+        <div ref={galeriContainerRef} className="flex flex-wrap gap-3 mb-3">
+          {galeriItems.map((item, i) => {
+            const isDragging = touchDragIndex === i || draggedIndex === i;
+            const isDropTarget = touchDragIndex !== null && touchOverIndex === i && touchDragIndex !== i;
+            
+            return (
+              <div 
+                key={item.id} 
+                draggable
+                onDragStart={(e) => handleDragStart(e, i)}
+                onDragOver={(e) => handleDragOver(e, i)}
+                onDrop={(e) => handleDrop(e, i)}
+                onTouchStart={(e) => handleTouchStart(e, i)}
+                onTouchMove={(e) => handleTouchMove(e, i)}
+                onTouchEnd={handleTouchEnd}
+                className={`relative w-24 h-24 rounded-lg overflow-visible bg-gray-100 group cursor-grab active:cursor-grabbing transition-all duration-150 select-none ${isDragging ? 'opacity-50 scale-95' : 'opacity-100'} ${isDropTarget ? 'ring-2 ring-primary ring-offset-2' : ''}`}
               >
-                ✕
-              </button>
-            </div>
-          ))}
+                <div className="relative w-full h-full rounded-lg overflow-hidden">
+                  <Image src={item.url} alt={`Galeri ${i + 1}`} fill sizes="96px" className="object-cover pointer-events-none" />
+                </div>
+                
+                {/* Drag Handle Overlay */}
+                <div className={`absolute inset-0 rounded-lg transition-colors flex items-center justify-center ${isDragging ? 'bg-primary/20' : 'bg-black/0 group-hover:bg-black/10'}`}>
+                  <svg className={`w-6 h-6 text-white drop-shadow-md transition-opacity pointer-events-none ${isDragging ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
+                  </svg>
+                </div>
+
+                {/* Order indicator */}
+                <span className="absolute bottom-0.5 left-0.5 w-5 h-5 bg-black/60 text-white text-[10px] font-bold rounded-md flex items-center justify-center pointer-events-none">
+                  {i + 1}
+                </span>
+
+                <button
+                  type="button"
+                  onClick={(e) => { e.stopPropagation(); removeGaleriItem(i); }}
+                  className="absolute -top-2 -right-2 w-7 h-7 bg-red-500 hover:bg-red-600 text-white rounded-full text-xs flex items-center justify-center shadow-lg opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity z-10 touch-manipulation"
+                >
+                  ✕
+                </button>
+              </div>
+            );
+          })}
         </div>
         <button
           type="button"

@@ -180,3 +180,13 @@ body {
   padding: 0 4px 6px;
   -webkit-tap-highlight-color: transparent;
 }
+
+/* Safe area support for notch phones (Samsung, Realme, iPhone, etc.) */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  .safe-top {
+    padding-top: env(safe-area-inset-top);
+  }
+}

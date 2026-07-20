@@ -73,20 +73,22 @@ export default function ImageCarousel({ images, altText }) {
             <button
               key={index}
               onClick={() => setCurrentIndex(index)}
-              className={`relative flex-shrink-0 w-16 h-16 sm:w-20 sm:h-20 rounded-lg overflow-hidden transition-all duration-200 cursor-pointer ${
+              className={`flex-shrink-0 w-16 h-16 sm:w-20 sm:h-20 rounded-lg overflow-hidden transition-all duration-200 cursor-pointer ${
                 currentIndex === index
                   ? "ring-2 ring-primary ring-offset-2 opacity-100"
                   : "opacity-50 hover:opacity-80"
               }`}
               aria-label={`Lihat foto ${index + 1}`}
             >
-              <Image
-                src={img}
-                alt={`Thumbnail ${index + 1}`}
-                fill
-                sizes="80px"
-                className="object-cover"
-              />
+              <div className="relative w-full h-full">
+                <Image
+                  src={img}
+                  alt={`Thumbnail ${index + 1}`}
+                  fill
+                  sizes="80px"
+                  className="object-cover"
+                />
+              </div>
             </button>
           ))}
         </div>
