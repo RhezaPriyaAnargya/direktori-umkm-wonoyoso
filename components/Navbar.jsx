@@ -38,12 +38,10 @@ export default function Navbar() {
               />
             </div>
             <div className="flex flex-col min-w-0">
-              <span className={`text-xs sm:text-base font-bold leading-tight transition-colors duration-300 truncate ${scrolled ? "text-text-primary" : "text-white"}`}>
-                <span className="sm:hidden">Wonoyoso</span>
-                <span className="hidden sm:inline">UMKM Wonoyoso</span>
+              <span className={`text-[11px] sm:text-base font-bold leading-tight transition-colors duration-300 truncate ${scrolled ? "text-text-primary" : "text-white"}`}>
+                UMKM Wonoyoso
               </span>
-              {/* Hide subtitle on mobile to save space */}
-              <span className={`hidden sm:block text-[10px] font-medium leading-tight transition-colors duration-300 ${scrolled ? "text-text-muted" : "text-white/70"}`}>
+              <span className={`text-[6px] sm:text-[10px] font-medium leading-tight transition-colors duration-300 ${scrolled ? "text-text-muted" : "text-white/70"}`}>
                 Direktori Usaha Dusun
               </span>
             </div>
